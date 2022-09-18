@@ -1,1 +1,2 @@
-# roombuds
+# ROOMB(ud)S 🌱
+Have you ever find yourself in need of finding a roommate for college, the time of your internship, or when you just moved to a new city? Endless scrolling on Facebook groups, using Discord chats, or other websites felt unsafe, time-consuming, and difficult? With ROOMB(ud)S we understand the struggle and facilitate the process for you. We provide an easy to use web application where you can find a perfect roommate for your needs. We focus on safety and want to provide you with potential roommates based on your needs (same city, school, workplace, age, gender, etc.) while valuing your privacy.
