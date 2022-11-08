@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Image from 'next/image'
 import {
     AppBar,
@@ -26,7 +25,7 @@ export const Navbar = () => {
       <Button style={{
         backgroundColor: "#459b55",
         color: "white"
-    }} variant="contained">Sign in</Button>
+    }} variant="contained" href="/">Sign in</Button>
     </Toolbar>
   </AppBar>
   );
