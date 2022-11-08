@@ -24,3 +24,17 @@ a {
     background: black;
   }
 }
+
+.column-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex-grow: 1;
+  flex-basis: 50%;
+}
+
+.column:after {
+  flex: auto;
+}
