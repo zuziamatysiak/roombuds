@@ -5,30 +5,28 @@ import {
     Toolbar,
     CssBaseline,
     Typography,
-    makeStyles,
+    Button
   } from "@material-ui/core";
 
 export const Navbar = () => {
   return (
     <AppBar position="static" style={{ background: '#FFFFFF' }}>
     <CssBaseline />
-    <Toolbar>
+    <Toolbar style={{ justifyContent: "space-between" }}>
       <Typography variant="h4">
         <div style = {{width: "20%", paddingTop : "5px"}}>
         <Image
             src="/logo.png"
             alt="logo"
-            width = {150}
+            width = {190}
             height = {70}
         />
         </div>
       </Typography>
-        <div>
-            // TODO fix
-          <Link href="/" style={{ color: 'black', paddingLeft : "5px"}}>
-            Login
-          </Link>
-        </div>
+      <Button style={{
+        backgroundColor: "#459b55",
+        color: "white"
+    }} variant="contained">Sign in</Button>
     </Toolbar>
   </AppBar>
   );
