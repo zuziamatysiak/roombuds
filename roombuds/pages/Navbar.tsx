@@ -18,14 +18,14 @@ export const Navbar = () => {
             src="/logo.png"
             alt="logo"
             width = {190}
-            height = {70}
+            height = {60}
         />
         </div>
       </Typography>
       <Button style={{
         backgroundColor: "#459b55",
         color: "white"
-    }} variant="contained" href="/">Sign in</Button>
+    }} variant="contained" href="/LoginPage">Sign in</Button>
     </Toolbar>
   </AppBar>
   );
