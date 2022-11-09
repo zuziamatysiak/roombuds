@@ -11,16 +11,15 @@ import {
     createTheme
   } from "@material-ui/core";
 
-
-export default function LoginPage() {
+export default function SignupPage() {
     return (
-      <div>
+        <div>
         <Navbar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box style = {{ marginTop: 150, alignItems: 'center', display: 'flex', flexDirection: 'column'}}> 
         <Typography variant="h5">
-            Login 🌱
+            Signup 🌱
         </Typography>
         <TextField
             //   variant="outlined" TODO: fix potentially
@@ -43,13 +42,9 @@ export default function LoginPage() {
               type="submit"
               fullWidth
               variant="contained"
-              style = {{marginTop: 20, backgroundColor: "#459b55", color: "white"}}> Login </Button>  
-        <Link href="/SignupPage" variant="body2">
-                  {"Are you not a roombud yet? Sign up! :)"}
-        </Link>
+              style = {{marginTop: 20, backgroundColor: "#459b55", color: "white"}}> Sign me up! :) </Button>  
         </Box>
       </Container>
       </div>
     )
-  }
-  
+}
