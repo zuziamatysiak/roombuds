@@ -11,15 +11,15 @@ export default function Home() {
           <title>ROOMB(ud)S 🌱</title>
         </Head>
         <main className={styles.main}>
-        <div className="column-container">
-          <div className="column">
-          <h1 className={styles.title}>
-            Find your next roommate on roombuds. 🌱
-          </h1>
-          <h1 className ={styles.description}> roombuds matches students and new grads with roommates you can trust who work at your company or go to the same school as you!</h1>
+        <div className={styles.column_container}>
+          <div className={styles.column}>
+            <h1 className={styles.title}>
+             Find your next roommate on roombuds. 🌱
+            </h1>
+            <h1 className ={styles.description}> roombuds matches students and new grads with roommates you can trust who work at your company or go to the same school as you!</h1>
           </div>
-          <div className="column">
-            
+          <div className={styles.column}>
+          <img src = "/humans.jpg" className={styles.picture}/>
           </div>
         </div>
         </main>
