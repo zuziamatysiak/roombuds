@@ -1,17 +1,21 @@
 import { Navbar } from '../pages/Navbar'
+import {write} from "../write" 
+import {useState} from 'react';
 import {
     CssBaseline,
     Typography,
     Button,
     TextField,
-    Link,
     Box,
     Container,
-    ThemeProvider,
-    createTheme
   } from "@material-ui/core";
 
 export default function SignupPage() {
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPassInput] = useState('');
+  function handleSubmit(props: any) {
+    write(emailInput, passwordInput)
+  }  
     return (
         <div>
         <Navbar />
@@ -28,6 +32,9 @@ export default function SignupPage() {
               required
               fullWidth
               style = {{marginTop: 20}}
+              onChange={(e) => {
+                setEmailInput(e.target.value)
+              }}
         />
         <TextField
             //   variant="outlined"
@@ -37,11 +44,15 @@ export default function SignupPage() {
               required
               fullWidth
               style = {{marginTop: 20}}
+              onChange={(e) => {
+                setPassInput(e.target.value)
+              }}
         />
-        <Button
+        <Button 
               type="submit"
               fullWidth
               variant="contained"
+              onClick = {handleSubmit}
               style = {{marginTop: 20, backgroundColor: "#459b55", color: "white"}}> Sign me up! :) </Button>  
         </Box>
       </Container>

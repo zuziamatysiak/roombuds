@@ -9,6 +9,7 @@ export default function Home() {
       <div className={styles.container}>
         <Head>
           <title>ROOMB(ud)S 🌱</title>
+          
         </Head>
         <main className={styles.main}>
         <div className={styles.column_container}>

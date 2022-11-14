@@ -1,4 +1,5 @@
 import { Navbar } from '../pages/Navbar'
+import {read} from "../read" 
 import {
     CssBaseline,
     Typography,
@@ -10,9 +11,14 @@ import {
     ThemeProvider,
     createTheme
   } from "@material-ui/core";
-
+import {useState} from 'react';
 
 export default function LoginPage() {
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPassInput] = useState('');
+  function handleSubmit(props: any) {
+    read(emailInput, passwordInput)
+  }  
     return (
       <div>
         <Navbar />
@@ -29,6 +35,9 @@ export default function LoginPage() {
               required
               fullWidth
               style = {{marginTop: 20}}
+              onChange={(e) => {
+                setEmailInput(e.target.value)
+              }}
         />
         <TextField
             //   variant="outlined"
@@ -38,11 +47,15 @@ export default function LoginPage() {
               required
               fullWidth
               style = {{marginTop: 20}}
+              onChange={(e) => {
+                setPassInput(e.target.value)
+              }}
         />
         <Button
               type="submit"
               fullWidth
               variant="contained"
+              onClick = {handleSubmit}
               style = {{marginTop: 20, backgroundColor: "#459b55", color: "white"}}> Login </Button>  
         <Link href="/SignupPage" variant="body2">
                   {"Are you not a roombud yet? Sign up! :)"}
