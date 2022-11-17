@@ -13,25 +13,30 @@ import { get } from '../utils/database'
 import { USER_TABLE } from '../utils/constants'
 import { useRouter } from 'next/router'
 import { UserContext } from '../utils/auth'
+import { GetResponse } from '../utils/types'
 
 // function to query database for user with email
 // validates if passwords match
-const validateLogin = async (email: string, password: string) => {
+const validateLogin = async (
+  email: string,
+  password: string
+): Promise<GetResponse> => {
   const userInfo = await get('email', email, USER_TABLE)
   // TODO: better handle errors and display them to user
   if (!userInfo.success) {
+    return userInfo
   } else {
     if (userInfo.data == null) {
       console.log('Wrong username')
-      return false
+      return { success: false, errorMessage: 'Wrong username' }
     } else if (userInfo.data.password == password) {
       console.log(
         'users::read::success - ' + JSON.stringify(userInfo.data, null, 2)
       )
-      return true
+      return userInfo
     } else {
       console.log('Wrong password')
-      return false
+      return { success: false, errorMessage: 'Wrong password' }
     }
   }
 }
@@ -44,9 +49,13 @@ export default function LoginPage() {
   const [passwordInput, setPassInput] = useState('')
 
   async function handleSubmit() {
-    const success = await validateLogin(emailInput, passwordInput)
-    if (success) {
-      context.setUser({ email: emailInput })
+    const resp = await validateLogin(emailInput, passwordInput)
+    if (resp.success) {
+      context.setUser({
+        firstName: resp.data.firstName,
+        lastName: resp.data.lastName,
+        email: resp.data.email,
+      })
       router.push('/dashboard')
     }
   }

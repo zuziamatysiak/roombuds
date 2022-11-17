@@ -8,9 +8,11 @@ import {
 } from '@material-ui/core'
 import { useContext } from 'react'
 import { UserContext } from '../utils/auth'
+import { useRouter } from 'next/router'
 
 export const Navbar = () => {
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
+  const router = useRouter()
 
   return (
     <AppBar position="static" style={{ background: '#FFFFFF' }}>
@@ -30,17 +32,20 @@ export const Navbar = () => {
             variant="contained"
             href="/login"
           >
-            Sign in
+            Log in
           </Button>
         ) : (
-          // TODO: implement logout
+          // TODO: implement logout (hacky rn)
           <Button
             style={{
               backgroundColor: '#459b55',
               color: 'white',
             }}
             variant="contained"
-            href="/"
+            onClick={() => {
+              setUser(null)
+              router.push('/')
+            }}
           >
             Log out
           </Button>
