@@ -51,6 +51,7 @@ export default function LoginPage() {
   async function handleSubmit() {
     const resp = await validateLogin(emailInput, passwordInput)
     if (resp.success) {
+      // save user info to context
       context.setUser({
         firstName: resp.data.firstName,
         lastName: resp.data.lastName,
@@ -108,8 +109,7 @@ export default function LoginPage() {
               color: 'white',
             }}
           >
-            {' '}
-            Login{' '}
+            Login
           </Button>
           <Link href="/signup" variant="body2">
             {'Are you not a roombud yet? Sign up! :)'}

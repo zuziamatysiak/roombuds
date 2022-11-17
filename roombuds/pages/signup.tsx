@@ -1,6 +1,6 @@
 import { Navbar } from '../components/Navbar'
 import { put } from '../utils/database'
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import {
   CssBaseline,
   Typography,
@@ -9,9 +9,10 @@ import {
   Container,
   Grid,
 } from '@material-ui/core'
-import { FormField } from '../components/Form'
+import { FormTextField } from '../components/Form'
 import { USER_TABLE } from '../utils/constants'
 import { useRouter } from 'next/router'
+import { UserContext } from '../utils/auth'
 
 const initialFormState = {
   email: '',
@@ -21,6 +22,8 @@ const initialFormState = {
 }
 
 export default function SignupPage() {
+  const context = useContext(UserContext)
+
   const router = useRouter()
   const [state, setState] = useState(initialFormState)
   const updateState = useCallback((newState: any) => {
@@ -28,8 +31,15 @@ export default function SignupPage() {
   }, [])
 
   const handleSubmit = async () => {
-    const ret = await put(state, USER_TABLE)
-    if (ret.success) {
+    const resp = await put(state, USER_TABLE)
+    if (resp.success) {
+      // save user info to context
+      context.setUser({
+        firstName: state.firstName,
+        lastName: state.lastName,
+        email: state.email,
+      })
+
       // redirect to onboard page
       router.push('/onboard')
     }
@@ -52,7 +62,7 @@ export default function SignupPage() {
           <Typography variant="h5">Signup 🌱</Typography>
           <Grid container>
             <Grid item xs={6}>
-              <FormField
+              <FormTextField
                 id="firstName"
                 label="First Name"
                 value={state.firstName}
@@ -60,7 +70,7 @@ export default function SignupPage() {
               />
             </Grid>
             <Grid item xs={6}>
-              <FormField
+              <FormTextField
                 id="lastName"
                 label="Last Name"
                 value={state.lastName}
@@ -68,7 +78,7 @@ export default function SignupPage() {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormField
+              <FormTextField
                 id="email"
                 label="Email"
                 value={state.email}
@@ -76,7 +86,7 @@ export default function SignupPage() {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormField
+              <FormTextField
                 id="password"
                 label="Password"
                 value={state.password}

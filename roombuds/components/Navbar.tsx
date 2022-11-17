@@ -12,6 +12,8 @@ import { useRouter } from 'next/router'
 
 export const Navbar = () => {
   const { user, setUser } = useContext(UserContext)
+  console.log(user)
+
   const router = useRouter()
 
   return (
