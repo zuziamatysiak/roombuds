@@ -12,12 +12,14 @@ export const FormTextField = ({
   label,
   value,
   updateState,
+  type = "", // defaults to empty string
   required = true, // defaults to true
   fullWidth = true, // defaults to true
 }: {
   id: string
   label: string
   value: string
+  type?: string
   updateState: (newState: Object) => void
   required?: boolean
   fullWidth?: boolean
@@ -29,6 +31,7 @@ export const FormTextField = ({
       value={value}
       required={required}
       fullWidth={fullWidth}
+      type = {type}
       onChange={(e) => updateState({ [id]: e.target.value })}
       style={{ marginBottom: '1rem' }}
     />
