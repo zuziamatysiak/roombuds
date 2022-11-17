@@ -6,8 +6,12 @@ import {
   Typography,
   Button,
 } from '@material-ui/core'
+import { useContext } from 'react'
+import { UserContext } from '../utils/auth'
 
 export const Navbar = () => {
+  const { user } = useContext(UserContext)
+
   return (
     <AppBar position="static" style={{ background: '#FFFFFF' }}>
       <CssBaseline />
@@ -17,16 +21,30 @@ export const Navbar = () => {
             <Image src="/logo.png" alt="logo" width={190} height={60} />
           </div>
         </Typography>
-        <Button
-          style={{
-            backgroundColor: '#459b55',
-            color: 'white',
-          }}
-          variant="contained"
-          href="/login"
-        >
-          Sign in
-        </Button>
+        {!user ? (
+          <Button
+            style={{
+              backgroundColor: '#459b55',
+              color: 'white',
+            }}
+            variant="contained"
+            href="/login"
+          >
+            Sign in
+          </Button>
+        ) : (
+          // TODO: implement logout
+          <Button
+            style={{
+              backgroundColor: '#459b55',
+              color: 'white',
+            }}
+            variant="contained"
+            href="/"
+          >
+            Log out
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   )

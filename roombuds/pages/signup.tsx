@@ -1,5 +1,5 @@
 import { Navbar } from '../components/Navbar'
-import { write } from '../write'
+import { put } from '../utils/database'
 import { useCallback, useState } from 'react'
 import {
   CssBaseline,
@@ -10,6 +10,8 @@ import {
   Grid,
 } from '@material-ui/core'
 import { FormField } from '../components/Form'
+import { USER_TABLE } from '../utils/constants'
+import { useRouter } from 'next/router'
 
 const initialFormState = {
   email: '',
@@ -19,12 +21,19 @@ const initialFormState = {
 }
 
 export default function SignupPage() {
+  const router = useRouter()
   const [state, setState] = useState(initialFormState)
   const updateState = useCallback((newState: any) => {
     setState((currentState) => ({ ...currentState, ...newState }))
   }, [])
-  const handleSubmit = () => {
-    write(state)
+
+  const handleSubmit = async () => {
+    const ret = await put(state, USER_TABLE)
+    if (ret.success) {
+      // redirect to onboard page
+      router.push('/onboard')
+    }
+    //  TODO: show error message if signup is unsuccessful
   }
 
   return (

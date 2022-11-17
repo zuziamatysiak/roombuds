@@ -1,5 +1,4 @@
 import { Navbar } from '../components/Navbar'
-import { read } from '../read'
 import {
   CssBaseline,
   Typography,
@@ -8,17 +7,50 @@ import {
   Link,
   Box,
   Container,
-  ThemeProvider,
-  createTheme,
 } from '@material-ui/core'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { get } from '../utils/database'
+import { USER_TABLE } from '../utils/constants'
+import { useRouter } from 'next/router'
+import { UserContext } from '../utils/auth'
+
+// function to query database for user with email
+// validates if passwords match
+const validateLogin = async (email: string, password: string) => {
+  const userInfo = await get('email', email, USER_TABLE)
+  // TODO: better handle errors and display them to user
+  if (!userInfo.success) {
+  } else {
+    if (userInfo.data == null) {
+      console.log('Wrong username')
+      return false
+    } else if (userInfo.data.password == password) {
+      console.log(
+        'users::read::success - ' + JSON.stringify(userInfo.data, null, 2)
+      )
+      return true
+    } else {
+      console.log('Wrong password')
+      return false
+    }
+  }
+}
 
 export default function LoginPage() {
+  const context = useContext(UserContext)
+  const router = useRouter()
+
   const [emailInput, setEmailInput] = useState('')
   const [passwordInput, setPassInput] = useState('')
-  function handleSubmit(props: any) {
-    read(emailInput, passwordInput)
+
+  async function handleSubmit() {
+    const success = await validateLogin(emailInput, passwordInput)
+    if (success) {
+      context.setUser({ email: emailInput })
+      router.push('/dashboard')
+    }
   }
+
   return (
     <div>
       <Navbar />
