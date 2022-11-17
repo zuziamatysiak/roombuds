@@ -37,16 +37,15 @@ const DashboardPage = () => {
             <Card variant="outlined" style={{ padding: '2rem' }}>
               <Typography>
                 Looking for roommates in{' '}
-                <span style={{ fontWeight: 600 }}>New York</span>
+                <span style={{ fontWeight: 600 }}>{userPrefs.location}</span>
               </Typography>
               <Typography>
-                Works at <span style={{ fontWeight: 600 }}>Google</span>
+                Works at{' '}
+                <span style={{ fontWeight: 600 }}>{userPrefs.company}</span>
               </Typography>
               <Typography>
                 Goes to{' '}
-                <span style={{ fontWeight: 600 }}>
-                  University of Pennsylvania
-                </span>
+                <span style={{ fontWeight: 600 }}>{userPrefs.college}</span>
               </Typography>
             </Card>
           </Grid>
