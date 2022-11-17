@@ -89,6 +89,7 @@ export default function SignupPage() {
               <FormTextField
                 id="password"
                 label="Password"
+                type="password"
                 value={state.password}
                 updateState={updateState}
               />

@@ -1,4 +1,4 @@
-import { accessKeyId, secretAccessKey } from '../secrets'
+import { accessKeyId, secretAccessKey } from './secrets'
 import { GetResponse, PutResponse } from './types'
 
 var AWS = require('aws-sdk')
