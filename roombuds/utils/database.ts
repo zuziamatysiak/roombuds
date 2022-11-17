@@ -1,3 +1,4 @@
+import { accessKeyId, secretAccessKey } from '../secrets'
 import { GetResponse, PutResponse } from './types'
 
 var AWS = require('aws-sdk')
@@ -5,8 +6,8 @@ let awsConfig = {
   region: 'us-east-1',
   endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
   // TODO: remember to input before running the application :)
-  accessKeyId: '',
-  secretAccessKey: '',
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey,
 }
 AWS.config.update(awsConfig)
 
@@ -24,19 +25,17 @@ export const put = async (data: any, table: string): Promise<PutResponse> => {
     Item: data,
   }
 
-  await docClient.put(params, function (err: any, data: any) {
-    if (err) {
-      console.log('users::save::error - ' + JSON.stringify(err, null, 2))
-      return {
-        success: false,
-        errorMessage: `users::save::error: ${JSON.stringify(err, null, 2)}`,
-      }
-    } else {
-      console.log('users::save::success')
-      return { success: true }
+  try {
+    await docClient.put(params).promise()
+    console.log('users::save::success')
+    return { success: true }
+  } catch (err) {
+    console.log('users::save::error - ' + JSON.stringify(err, null, 2))
+    return {
+      success: false,
+      errorMessage: `users::save::error: ${JSON.stringify(err, null, 2)}`,
     }
-  })
-  return { success: false, errorMessage: 'unknown error' }
+  }
 }
 
 /**
