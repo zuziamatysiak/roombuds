@@ -40,7 +40,9 @@ const initialState = {
 
 export default function OnboardPage() {
   const [collegeList, setCollegeList] = useState([])
+  const [cityList, setCityList] = useState([])
   useEffect(() => {
+    // TODO: add error handling & potentially move to a different file
     fetch('http://universities.hipolabs.com/search?country=United%20States')
     .then(response => response.json())
     .then(collegeData => {
@@ -48,8 +50,18 @@ export default function OnboardPage() {
         return item["name"];
        })
       setCollegeList(collegeDataNames)});
-  }, []);
 
+    // TODO: this list might be too big and too slow, maybe include just popular cities instead?
+    fetch('https://countriesnow.space/api/v0.1/countries')
+      .then(response => response.json())
+      .then(cityData => {
+        cityData["data"].map(function(item : any,index : any){
+          if (item["country"] == "United States") {
+            setCityList(item["cities"])
+          }
+         })
+        });
+  }, []);
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
@@ -76,10 +88,11 @@ export default function OnboardPage() {
         👋 Welcome {user?.firstName} {user?.lastName}
       </Typography>
       <Box style={{ padding: '1rem 3rem', maxWidth: '50%', margin: 'auto' }}>
-        <FormTextField
+        <FormSelect
           id="location"
           label="Where are you moving to?"
           value={state.location}
+          items={cityList}
           updateState={updateState}
         />
         <FormSelect
