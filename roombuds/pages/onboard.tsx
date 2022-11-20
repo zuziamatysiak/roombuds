@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useState, useEffect } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
@@ -39,6 +39,17 @@ const initialState = {
 }
 
 export default function OnboardPage() {
+  const [collegeList, setCollegeList] = useState([])
+  useEffect(() => {
+    fetch('http://universities.hipolabs.com/search?country=United%20States')
+    .then(response => response.json())
+    .then(collegeData => {
+      var collegeDataNames = collegeData.map(function(item : any,index : any){
+        return item["name"];
+       })
+      setCollegeList(collegeDataNames)});
+  }, []);
+
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
@@ -56,6 +67,7 @@ export default function OnboardPage() {
       router.push('/dashboard')
     }
   }
+
 
   return (
     <>
@@ -84,10 +96,11 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <FormTextField
+        <FormSelect
           id="college"
           label="Where did you go to college?"
           value={state.college}
+          items={collegeList}
           updateState={updateState}
         />
         <FormTextField
