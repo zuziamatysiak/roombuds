@@ -15,12 +15,14 @@ import {
 } from '@material-ui/core'
 import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
-import { useCallback, useContext, useState, useEffect } from 'react'
+import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
 import { put } from '../utils/database'
+import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
 
 const initialState = {
   location: '',
@@ -32,8 +34,8 @@ const initialState = {
   weed: '',
   alcohol: '',
   social: '',
-  wakeuptime: '',
-  bedtime: '',
+  wakeuptime: new Date(''),
+  bedtime: new Date(''),
   trash: '',
   hobbies: '',
   weed_apartment: '',
@@ -51,6 +53,17 @@ const initialState = {
 }
 
 export default function OnboardPage() {
+  const [selectedWakeDate, setSelectedWakeDate] = useState(new Date('2014-08-18T21:11:54'));
+  const [selectedBedDate, setSelectedBedDate] = useState(new Date('2014-08-18T21:11:54'));
+  // TODO: check if this can be done in a better way
+  const handleWakeDateChange = (date : Date) => {
+    setSelectedWakeDate(date);
+    state.wakeuptime = date;
+  };
+  const handleBedDateChange = (date : Date) => {
+    setSelectedBedDate(date);
+    state.bedtime = date;
+  };
   const [collegeList, setCollegeList] = useState([])
   const [cityList, setCityList] = useState([])
   useEffect(() => {
@@ -188,20 +201,20 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <FormTextField
-          id="wakeuptime"
-          label="What time do you wake up?"
-          value={state.wakeuptime}
-          updateState={updateState}
-          required={false}
-        />
-        <FormTextField
-          id="bedtime"
-          label="What time do you go to sleep?"
-          value={state.bedtime}
-          updateState={updateState}
-          required={false}
-        />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <TimePicker 
+            autoOk 
+            label="What time do you wake up?" 
+            value={state.wakeuptime} 
+            onChange={handleWakeDateChange} />
+        </MuiPickersUtilsProvider>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <TimePicker 
+            autoOk 
+            label="What time do you go to sleep?" 
+            value={state.bedtime} 
+            onChange={handleBedDateChange} />
+        </MuiPickersUtilsProvider>
         <FormSelect
           id="trash"
           label="How often do you throw out the trash?"
@@ -340,7 +353,6 @@ export default function OnboardPage() {
           updateState={updateState}
           required={false}
         />
-
         <Button
           type="submit"
           fullWidth
