@@ -36,6 +36,17 @@ const initialState = {
   bedtime: '',
   trash: '',
   hobbies: '',
+  weed_apartment: '',
+  drugs: '',
+  notice: '',
+  common_space: '',
+  dishes: '',
+  shared_room: '',
+  bathroom: '',
+  leftovers: '',
+  instagram: '',
+  parties: '',
+  atmosphere: ''
 }
 
 export default function OnboardPage() {
@@ -157,6 +168,13 @@ export default function OnboardPage() {
           updateState={updateState}
         />
         <FormSelect
+          id="drugs"
+          label="Do you do other drugs?"
+          value={state.drugs}
+          items={['Yes', 'No']}
+          updateState={updateState}
+        />
+        <FormSelect
           id="social"
           label="How often do you plan to have people over?"
           value={state.social}
@@ -200,6 +218,117 @@ export default function OnboardPage() {
           id="hobbies"
           label="What are your hobbies?"
           value={state.hobbies}
+          updateState={updateState}
+          required={false}
+        />
+        <FormSelect
+          id="weed_apartment"
+          label="Do you plan on smoking weed in the apartment?"
+          value={state.weed_apartment}
+          items={['Yes', 'No']}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="notice"
+          label="Should your roommate let you know if they will have people over in their room?"
+          value={state.notice}
+          items={['Yes', 'No']}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="common_space"
+          label="Should your roommate tell you if they will have people over in the common space?"
+          value={state.common_space}
+          items={['Yes', 'No']}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="dishes"
+          label="When do you clean the dishes?"
+          value={state.dishes}
+          items={[
+            'Right after preparing my meal',
+            'Right after I finish eating',
+            'Next day',
+            'Within a week',
+            'I do not have a timeline on when',
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="shared_room"
+          label="Do you mind a shared room with your roommate at a cheaper price?"
+          value={state.shared_room}
+          items={[
+            'Yes',
+            'No'
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="bathroom"
+          label="How much time do you spend in the bathroom in the morning?"
+          value={state.bathroom}
+          items={[
+            '< 5 min',
+            '< 15 min',
+            '< 30 min',
+            'more than 30 min'
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="leftovers"
+          label="When do you throw away leftovers if you didn’t eat them?"
+          value={state.leftovers}
+          items={[
+            '< 5 min',
+            '< 15 min',
+            '< 30 min',
+            'more than 30 min'
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="common_space"
+          label="Should you inform your roommate before putting your things in the common space?"
+          value={state.leftovers}
+          items={[
+            'Yes',
+            'No'
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="parties"
+          label="How many parties per month do you plan on having in the apartment?"
+          value={state.parties}
+          items={[
+            '0',
+            '1',
+            '< 3',
+            'At least once a week'
+          ]}
+          updateState={updateState}
+        />
+        <FormSelect
+          id="atmosphere"
+          label="Do you prefer loud or quiet atmosphere?"
+          value={state.atmosphere}
+          items={[
+            'Quiet',
+            'Loud',
+            'Quiet at night, loud during the day',
+            'Quiet during the day, loud at night',
+            "Quiet on weekdays, loud on the weekends",
+            "Don't really mind adjusting to either"
+          ]}
+          updateState={updateState}
+        />
+        <FormTextField
+          id="instagram"
+          label="What is your Instagram handle? (It will only be shared with verified users)"
+          value={state.instagram}
           updateState={updateState}
           required={false}
         />
