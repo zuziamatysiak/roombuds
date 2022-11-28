@@ -46,7 +46,8 @@ const initialState = {
   leftovers: '',
   instagram: '',
   parties: '',
-  atmosphere: ''
+  atmosphere: '',
+  reference_willingness: '',
 }
 
 export default function OnboardPage() {
@@ -332,6 +333,14 @@ export default function OnboardPage() {
           updateState={updateState}
           required={false}
         />
+        <FormTextField
+          id="reference_willingness"
+          label="Please provide contact information to your reference (previous reference)?"
+          value={state.reference_willingness}
+          updateState={updateState}
+          required={false}
+        />
+
         <Button
           type="submit"
           fullWidth
