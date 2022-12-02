@@ -204,6 +204,7 @@ export default function OnboardPage() {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <TimePicker 
             autoOk 
+            fullWidth
             label="What time do you wake up?" 
             value={state.wakeuptime} 
             onChange={handleWakeDateChange} />
@@ -211,6 +212,7 @@ export default function OnboardPage() {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <TimePicker 
             autoOk 
+            fullWidth
             label="What time do you go to sleep?" 
             value={state.bedtime} 
             onChange={handleBedDateChange} />
