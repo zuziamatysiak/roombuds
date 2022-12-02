@@ -207,6 +207,7 @@ export default function OnboardPage() {
             fullWidth
             label="What time do you wake up?" 
             value={state.wakeuptime} 
+            style={{ marginBottom: '1rem' }}
             onChange={handleWakeDateChange} />
         </MuiPickersUtilsProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
