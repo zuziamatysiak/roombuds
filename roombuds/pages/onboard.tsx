@@ -18,6 +18,7 @@ import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
+import { FormSelectReact } from '../components/FormSelectReact'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
@@ -53,7 +54,7 @@ const initialState = {
   atmosphere: '',
   reference_willingness: '',
   common_space_things: '',
-  // hobb: [],
+  hobb: [],
 }
 
 export default function OnboardPage() {
@@ -251,14 +252,12 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        {/* <Select
+        <FormSelectReact
           options={hobbiesList}
-          placeholder="Please select your hobbies"
+          label="What are your hobbies?"
           value={selectedHobbies}
-          onChange={handleHobbies}
-          isSearchable={true}
-          isMulti
-        /> */}
+          updateState={handleHobbies}
+        />
         <FormSelect
           id="weed_apartment"
           label="Do you plan on smoking weed in the apartment?"
