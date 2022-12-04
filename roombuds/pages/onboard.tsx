@@ -36,8 +36,8 @@ const initialState = {
   weed: '',
   alcohol: '',
   social: '',
-  wakeuptime: new Date(''),
-  bedtime: new Date(''),
+  // wakeuptime: new Date(''),
+  // bedtime: new Date(''),
   trash: '',
   hobbies: '',
   weed_apartment: '',
@@ -53,7 +53,7 @@ const initialState = {
   atmosphere: '',
   reference_willingness: '',
   common_space_things: '',
-  hobb: [],
+  // hobb: [],
 }
 
 export default function OnboardPage() {
@@ -221,7 +221,7 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <TimePicker 
             autoOk 
             fullWidth
@@ -237,7 +237,7 @@ export default function OnboardPage() {
             label="What time do you go to sleep?" 
             value={state.bedtime} 
             onChange={handleBedDateChange} />
-        </MuiPickersUtilsProvider>
+        </MuiPickersUtilsProvider> */}
         <FormSelect
           id="trash"
           label="How often do you throw out the trash?"
@@ -251,14 +251,14 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <Select
+        {/* <Select
           options={hobbiesList}
           placeholder="Please select your hobbies"
           value={selectedHobbies}
           onChange={handleHobbies}
           isSearchable={true}
           isMulti
-        />
+        /> */}
         <FormSelect
           id="weed_apartment"
           label="Do you plan on smoking weed in the apartment?"
