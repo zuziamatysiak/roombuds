@@ -68,25 +68,35 @@ export default function OnboardPage() {
   const [collegeList, setCollegeList] = useState([])
   const [cityList, setCityList] = useState([])
   useEffect(() => {
-    // TODO: add error handling & potentially move to a different file
-    fetch('http://universities.hipolabs.com/search?country=United%20States')
-    .then(response => response.json())
-    .then(collegeData => {
-      var collegeDataNames = collegeData.map(function(item : any,index : any){
-        return item["name"];
-       })
-      setCollegeList(collegeDataNames)});
-
-    // TODO: this list might be too big and too slow, maybe include just popular cities instead?
-    fetch('https://countriesnow.space/api/v0.1/countries')
+    try {
+      fetch('http://universities.hipolabs.com/search?country=United%20States')
       .then(response => response.json())
-      .then(cityData => {
-        cityData["data"].map(function(item : any,index : any){
-          if (item["country"] == "United States") {
-            setCityList(item["cities"])
-          }
-         })
-        });
+      .then(collegeData => {
+        var collegeDataNames = collegeData.map(function(item : any,index : any){
+          return item["name"];
+        })
+        setCollegeList(collegeDataNames)});
+    }
+    catch (error) {
+      console.log("Unable to connect to universities API.")
+      setCollegeList([])
+    }
+
+    try {
+      fetch('https://countriesnow.space/api/v0.1/countries')
+        .then(response => response.json())
+        .then(cityData => {
+          cityData["data"].map(function(item : any,index : any){
+            if (item["country"] == "United States") {
+              setCityList(item["cities"])
+            }
+          })
+          });
+    }
+    catch {
+      console.log("Unable to connect to cities API.")
+      setCityList([])
+    }
   }, []);
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
