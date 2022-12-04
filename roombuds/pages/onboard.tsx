@@ -50,6 +50,7 @@ const initialState = {
   parties: '',
   atmosphere: '',
   reference_willingness: '',
+  common_space_things: ''
 }
 
 export default function OnboardPage() {
@@ -307,9 +308,9 @@ export default function OnboardPage() {
           updateState={updateState}
         />
         <FormSelect
-          id="common_space"
+          id="common_space_things"
           label="Should you inform your roommate before putting your things in the common space?"
-          value={state.leftovers}
+          value={state.common_space_things}
           items={[
             'Yes',
             'No'
