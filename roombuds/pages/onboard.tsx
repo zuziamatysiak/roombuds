@@ -9,10 +9,11 @@ import {
   Radio,
   RadioGroup,
   InputLabel,
-  Select,
   MenuItem,
   Button,
 } from '@material-ui/core'
+
+import Select from "react-select";
 import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
@@ -23,6 +24,7 @@ import { USER_PREFERENCES_TABLE } from '../utils/constants'
 import { put } from '../utils/database'
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import { hobbiesList } from '../public/hobbies_list'
 
 const initialState = {
   location: '',
@@ -50,12 +52,19 @@ const initialState = {
   parties: '',
   atmosphere: '',
   reference_willingness: '',
-  common_space_things: ''
+  common_space_things: '',
+  hobb: [],
 }
 
 export default function OnboardPage() {
+  const [selectedHobbies, setSelectedHobbies] = useState();
   const [selectedWakeDate, setSelectedWakeDate] = useState(new Date('2014-08-18T21:11:54'));
   const [selectedBedDate, setSelectedBedDate] = useState(new Date('2014-08-18T21:11:54'));
+  function handleHobbies(data : any) {
+    setSelectedHobbies(data);
+    state.hobb = data;
+    console.log(state.hobb);
+  }
   // TODO: check if this can be done in a better way
   const handleWakeDateChange = (date : Date) => {
     setSelectedWakeDate(date);
@@ -242,12 +251,13 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <FormTextField
-          id="hobbies"
-          label="What are your hobbies?"
-          value={state.hobbies}
-          updateState={updateState}
-          required={false}
+        <Select
+          options={hobbiesList}
+          placeholder="Please select your hobbies"
+          value={selectedHobbies}
+          onChange={handleHobbies}
+          isSearchable={true}
+          isMulti
         />
         <FormSelect
           id="weed_apartment"
