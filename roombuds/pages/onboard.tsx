@@ -13,6 +13,7 @@ import {
   Button,
 } from '@material-ui/core'
 
+import {useMediaQuery, useMediaQueries} from '@react-hook/media-query'
 import Select from "react-select";
 import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
@@ -27,6 +28,7 @@ import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import { hobbiesList } from '../public/hobbies_list'
 import { validateHeaderValue } from 'http';
+import { matchesMiddleware } from 'next/dist/shared/lib/router/router';
 
 const initialState = {
   location: '',
@@ -128,6 +130,8 @@ export default function OnboardPage() {
     setState((currentState) => ({ ...currentState, ...newState }))
   }, [])
 
+  const matches = useMediaQuery('(max-width: 600px)')
+
   // TODO: form validation
   const handleSubmit = async () => {
     let missing = stateChecker()
@@ -139,31 +143,23 @@ export default function OnboardPage() {
         router.push('/dashboard')
       }
     } else {
-      alert("You are missing " + missing + ".Please fill out that field and then come back")
+      alert("You are missing " + missing + ". Please fill out that field and then come back")
     }
   }
-
+  console.log(matches)
   function stateChecker() {
     for (const [key, value] of Object.entries(state)) {
       if (value.length == 0) return key
     }
-    // if (state.location.length == 0) return "location"
-    // if (state.budget.length == 0) return "budget"
-    // if (state.college.length == 0) return "college"
-    // if (state.company.length == 0) return "company"
-    // if (state.cleanliness.length == 0) return "cleanliness"
-    // if (state.cigarettes.length == 0) return "cigarettes"
-    // if (state.cigarettes.length == 0) return "cigarettes"
     return ""
   }
-
   return (
     <>
       <Navbar />
       <Typography variant="h4" style={{ margin: '1rem' }}>
         👋 Welcome {user?.firstName} {user?.lastName}
       </Typography>
-      <Box style={{ padding: '1rem 3rem', maxWidth: '50%', margin: 'auto' }}>
+        <Box style={{ padding: '1rem 3rem', maxWidth: !matches ? '50%' : '100%', margin: 'auto' }}>
         <FormSelect
           id="location"
           label="Where are you moving to?"
