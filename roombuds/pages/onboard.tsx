@@ -80,7 +80,7 @@ export default function OnboardPage() {
       state.hobbies = s
     } 
   }
-  // TODO: check if this can be done in a better way
+
   const handleWakeDateChange = (date : Date) => {
     setSelectedWakeDate(date);
     state.wakeuptime = '' + date.getHours();
@@ -130,7 +130,7 @@ export default function OnboardPage() {
     setState((currentState) => ({ ...currentState, ...newState }))
   }, [])
 
-  const matches = useMediaQuery('(max-width: 600px)')
+  const matches = useMediaQuery('(max-width: 900px)')
 
   // TODO: form validation
   const handleSubmit = async () => {
