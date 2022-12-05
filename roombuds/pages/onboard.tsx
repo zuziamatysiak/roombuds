@@ -26,6 +26,7 @@ import { put } from '../utils/database'
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import { hobbiesList } from '../public/hobbies_list'
+import { validateHeaderValue } from 'http';
 
 const initialState = {
   location: '',
@@ -54,7 +55,7 @@ const initialState = {
   atmosphere: '',
   reference_willingness: '',
   common_space_things: '',
-  hobb: [],
+  hobb: [''],
 }
 
 export default function OnboardPage() {
@@ -63,8 +64,18 @@ export default function OnboardPage() {
   const [selectedBedDate, setSelectedBedDate] = useState(new Date('2014-08-18T21:11:54'));
   function handleHobbies(data : any) {
     if (data.length <= 3) {
+      let l : string[] = []
+      data.forEach(function (value : any) {
+        l.push(value.label)
+      }); 
       setSelectedHobbies(data);
-      state.hobb = data;
+      state.hobb = l;
+      // TODO: change to actually display hobbies correctly
+      let s : string = ""
+      l.forEach(function (val : string){
+        s += val
+      });
+      state.hobbies = s
     } 
   }
   // TODO: check if this can be done in a better way
