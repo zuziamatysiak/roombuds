@@ -37,8 +37,8 @@ const initialState = {
   weed: '',
   alcohol: '',
   social: '',
-  // wakeuptime: new Date(''),
-  // bedtime: new Date(''),
+  wakeuptime: '',
+  bedtime: '',
   trash: '',
   hobbies: '',
   weed_apartment: '',
@@ -70,11 +70,11 @@ export default function OnboardPage() {
   // TODO: check if this can be done in a better way
   const handleWakeDateChange = (date : Date) => {
     setSelectedWakeDate(date);
-    state.wakeuptime = date;
+    state.wakeuptime = '' + date.getHours();
   };
   const handleBedDateChange = (date : Date) => {
     setSelectedBedDate(date);
-    state.bedtime = date;
+    state.bedtime = '' + date.getHours();
   };
   const [collegeList, setCollegeList] = useState([])
   const [cityList, setCityList] = useState([])
@@ -148,11 +148,11 @@ export default function OnboardPage() {
           value={state.budget}
           items={[
             '< $800',
-            '800 - 1200',
-            '1200 - 1500',
-            '1500 - 2000',
-            '2000 - 3500',
-            '3500+',
+            '$800 - $1200',
+            '$1200 - $1500',
+            '$1500 - $2000',
+            '$2000 - $3500',
+            '$3500+',
           ]}
           updateState={updateState}
         />
@@ -223,12 +223,12 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <TimePicker 
             autoOk 
             fullWidth
             label="What time do you wake up?" 
-            value={state.wakeuptime} 
+            value={selectedWakeDate} 
             style={{ marginBottom: '1rem' }}
             onChange={handleWakeDateChange} />
         </MuiPickersUtilsProvider>
@@ -237,9 +237,9 @@ export default function OnboardPage() {
             autoOk 
             fullWidth
             label="What time do you go to sleep?" 
-            value={state.bedtime} 
+            value={selectedBedDate} 
             onChange={handleBedDateChange} />
-        </MuiPickersUtilsProvider> */}
+        </MuiPickersUtilsProvider>
         <FormSelect
           id="trash"
           label="How often do you throw out the trash?"
