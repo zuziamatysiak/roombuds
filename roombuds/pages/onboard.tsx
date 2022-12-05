@@ -73,7 +73,7 @@ export default function OnboardPage() {
       // TODO: change to actually display hobbies correctly
       let s : string = ""
       l.forEach(function (val : string){
-        s += val
+        s += val + " "
       });
       state.hobbies = s
     } 
@@ -130,14 +130,32 @@ export default function OnboardPage() {
 
   // TODO: form validation
   const handleSubmit = async () => {
-    const prefs = { email: user.email, ...state }
-    const resp = await put(prefs, USER_PREFERENCES_TABLE)
-    if (resp.success) {
-      // redirect to onboard page
-      router.push('/dashboard')
+    let missing = stateChecker()
+    if (missing.length == 0) {
+      const prefs = { email: user.email, ...state }
+      const resp = await put(prefs, USER_PREFERENCES_TABLE)
+      if (resp.success) {
+        // redirect to onboard page
+        router.push('/dashboard')
+      }
+    } else {
+      alert("You are missing " + missing + ".Please fill out that field and then come back")
     }
   }
 
+  function stateChecker() {
+    for (const [key, value] of Object.entries(state)) {
+      if (value.length == 0) return key
+    }
+    // if (state.location.length == 0) return "location"
+    // if (state.budget.length == 0) return "budget"
+    // if (state.college.length == 0) return "college"
+    // if (state.company.length == 0) return "company"
+    // if (state.cleanliness.length == 0) return "cleanliness"
+    // if (state.cigarettes.length == 0) return "cigarettes"
+    // if (state.cigarettes.length == 0) return "cigarettes"
+    return ""
+  }
 
   return (
     <>
