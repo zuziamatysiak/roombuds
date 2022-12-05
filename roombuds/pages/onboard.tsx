@@ -62,9 +62,10 @@ export default function OnboardPage() {
   const [selectedWakeDate, setSelectedWakeDate] = useState(new Date('2014-08-18T21:11:54'));
   const [selectedBedDate, setSelectedBedDate] = useState(new Date('2014-08-18T21:11:54'));
   function handleHobbies(data : any) {
-    setSelectedHobbies(data);
-    state.hobb = data;
-    console.log(state.hobb);
+    if (data.length <= 3) {
+      setSelectedHobbies(data);
+      state.hobb = data;
+    } 
   }
   // TODO: check if this can be done in a better way
   const handleWakeDateChange = (date : Date) => {
@@ -254,9 +255,10 @@ export default function OnboardPage() {
         />
         <FormSelectReact
           options={hobbiesList}
-          label="What are your hobbies?"
+          label="What are your hobbies? Pick up to 3."
           value={selectedHobbies}
           updateState={handleHobbies}
+          items={hobbiesList}
         />
         <FormSelect
           id="weed_apartment"
