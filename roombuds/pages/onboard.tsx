@@ -159,7 +159,7 @@ export default function OnboardPage() {
       <Typography variant="h4" style={{ margin: '1rem' }}>
         👋 Welcome {user?.firstName} {user?.lastName}
       </Typography>
-        <Box style={{ padding: '1rem 3rem', maxWidth: !matches ? '50%' : '100%', margin: 'auto' }}>
+        <Box style={{ padding: '1rem 3rem', maxWidth: !matches ? '50%' : '100%', margin: 'auto'}}>
         <FormSelect
           id="location"
           label="Where are you moving to?"
@@ -343,7 +343,7 @@ export default function OnboardPage() {
         />
         <FormSelect
           id="leftovers"
-          label="When do you throw away leftovers if you didn’t eat them?"
+          label="When do you throw away leftovers?"
           value={state.leftovers}
           items={[
             '< 5 min',
@@ -355,7 +355,7 @@ export default function OnboardPage() {
         />
         <FormSelect
           id="common_space_things"
-          label="Should you inform your roommate before putting your things in the common space?"
+          label="Should you inform your roommate before putting things in the common space?"
           value={state.common_space_things}
           items={[
             'Yes',
@@ -365,11 +365,12 @@ export default function OnboardPage() {
         />
         <FormSelect
           id="parties"
-          label="How many parties per month do you plan on having in the apartment?"
+          label="How many parties / month do you plan on having?"
           value={state.parties}
           items={[
             '0',
             '1',
+            '2',
             '< 3',
             'At least once a week'
           ]}
@@ -391,14 +392,14 @@ export default function OnboardPage() {
         />
         <FormTextField
           id="instagram"
-          label="What is your Instagram handle? (It will only be shared with verified users)"
+          label="What is your Instagram handle?"
           value={state.instagram}
           updateState={updateState}
           required={false}
         />
         <FormTextField
           id="reference_willingness"
-          label="Please provide contact information to your reference (previous reference)?"
+          label="Please provide contact info to a previous roommate."
           value={state.reference_willingness}
           updateState={updateState}
           required={false}

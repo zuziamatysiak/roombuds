@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-
 export const FormTextField = ({
   id,
   label,
@@ -59,7 +58,7 @@ export const FormSelect = ({
         id={`${id}-select`}
         value={value}
         onChange={(e) => updateState({ [id]: e.target.value })}
-        style={{ marginBottom: '1rem' }}
+        style={{ marginBottom: '2rem' }}
       >
         {items.map((item) =>
           item.value && item.label ? (
