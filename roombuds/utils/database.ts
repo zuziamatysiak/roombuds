@@ -1,4 +1,4 @@
-import { accessKeyId, secretAccessKey, freeAccessKeyId, freeSecretAccessKey } from './secrets'
+import { accessKeyId, secretAccessKey } from './secrets'
 import { GetResponse, PutResponse } from './types'
 
 var AWS = require('aws-sdk')
@@ -6,8 +6,8 @@ let awsConfig = {
   region: 'us-east-1',
   endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
   // TODO: remember to input before running the application :)
-  accessKeyId: freeAccessKeyId,
-  secretAccessKey: freeSecretAccessKey,
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey,
 }
 AWS.config.update(awsConfig)
 
@@ -78,27 +78,27 @@ export const get = async (
  * @returns PutResponse {success: boolean, errorMessage?: string}
  */
 
- export const update = async (
-    data: Record<string, any>, 
-    keyName: string, 
-    keyVal: any, 
-    table: string
+export const update = async (
+  data: Record<string, any>,
+  keyName: string,
+  keyVal: any,
+  table: string
 ): Promise<PutResponse> => {
-  
-  let updateExpression='set';
+
+  let updateExpression = 'set';
   let ExpressionAttributeNames: Record<string, string> = {};
-  let ExpressionAttributeValues: Record<string, any>  = {};
+  let ExpressionAttributeValues: Record<string, any> = {};
   for (const property in data) {
     updateExpression += ` #${property} = :${property} ,`
     ExpressionAttributeNames['#' + property] = property
     ExpressionAttributeValues[':' + property] = data[property]
   }
 
-  updateExpression= updateExpression.slice(0, -1);
+  updateExpression = updateExpression.slice(0, -1);
   let params = {
     TableName: table,
     Key: {
-     [keyName]: keyVal,
+      [keyName]: keyVal,
     },
     UpdateExpression: updateExpression,
     ExpressionAttributeNames: ExpressionAttributeNames,
