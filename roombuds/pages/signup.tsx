@@ -19,6 +19,7 @@ const initialFormState = {
   password: '',
   firstName: '',
   lastName: '',
+  verified: false
 }
 
 export default function SignupPage() {
@@ -38,6 +39,7 @@ export default function SignupPage() {
         firstName: state.firstName,
         lastName: state.lastName,
         email: state.email,
+        verified: state.verified
       })
 
       // redirect to onboard page

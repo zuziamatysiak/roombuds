@@ -56,6 +56,7 @@ export default function LoginPage() {
         firstName: resp.data.firstName,
         lastName: resp.data.lastName,
         email: resp.data.email,
+        verified: resp.data.verified,
       })
       router.push('/dashboard')
     }

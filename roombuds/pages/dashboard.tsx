@@ -30,7 +30,7 @@ const DashboardPage = () => {
       <Navbar />
       <Box style={{ padding: '1rem 3rem', maxWidth: '75%', margin: 'auto' }}>
         <Typography variant="h4" style={{ margin: '1rem' }}>
-          👋 Welcome {user?.firstName} {user?.lastName}
+          👋 Welcome {user?.firstName} {user?.lastName} {user?.verified ? '✅' : ''}
         </Typography>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6} md={6}>
