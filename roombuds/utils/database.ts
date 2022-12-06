@@ -1,4 +1,4 @@
-import { accessKeyId, secretAccessKey } from './secrets'
+import { accessKeyId, secretAccessKey, freeAccessKeyId, freeSecretAccessKey } from './secrets'
 import { GetResponse, PutResponse } from './types'
 
 var AWS = require('aws-sdk')
@@ -6,8 +6,8 @@ let awsConfig = {
   region: 'us-east-1',
   endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
   // TODO: remember to input before running the application :)
-  accessKeyId: accessKeyId,
-  secretAccessKey: secretAccessKey,
+  accessKeyId: freeAccessKeyId,
+  secretAccessKey: freeSecretAccessKey,
 }
 AWS.config.update(awsConfig)
 
@@ -65,6 +65,55 @@ export const get = async (
     return {
       success: false,
       errorMessage: `users::read::error: ${JSON.stringify(err, null, 2)}`,
+    }
+  }
+}
+
+/**
+ *
+ * @param data data to update into table (e.g. {"verified": "true"})
+ * @param keyName key name of lookup (e.g. "email")
+ * @param keyVal key value of lookup (e.g. "test@test.com")
+ * @param table table name (e.g. "Users")
+ * @returns PutResponse {success: boolean, errorMessage?: string}
+ */
+
+ export const update = async (
+    data: Record<string, any>, 
+    keyName: string, 
+    keyVal: any, 
+    table: string
+): Promise<PutResponse> => {
+  
+  let updateExpression='set';
+  let ExpressionAttributeNames: Record<string, string> = {};
+  let ExpressionAttributeValues: Record<string, any>  = {};
+  for (const property in data) {
+    updateExpression += ` #${property} = :${property} ,`
+    ExpressionAttributeNames['#' + property] = property
+    ExpressionAttributeValues[':' + property] = data[property]
+  }
+
+  updateExpression= updateExpression.slice(0, -1);
+  let params = {
+    TableName: table,
+    Key: {
+     [keyName]: keyVal,
+    },
+    UpdateExpression: updateExpression,
+    ExpressionAttributeNames: ExpressionAttributeNames,
+    ExpressionAttributeValues: ExpressionAttributeValues
+  };
+
+  try {
+    await docClient.update(params).promise()
+    console.log('users::update::success')
+    return { success: true }
+  } catch (err) {
+    console.log('users::update::error - ' + JSON.stringify(err, null, 2))
+    return {
+      success: false,
+      errorMessage: `users::update::error: ${JSON.stringify(err, null, 2)}`,
     }
   }
 }
