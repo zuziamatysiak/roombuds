@@ -12,9 +12,10 @@ import {
   MenuItem,
   Button,
 } from '@material-ui/core'
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 
-import {useMediaQuery, useMediaQueries} from '@react-hook/media-query'
-import Select from "react-select";
+import { useMediaQuery, useMediaQueries } from '@react-hook/media-query'
+import Select from 'react-select'
 import { PinpointEmail } from 'aws-sdk'
 import { useRouter } from 'next/router'
 import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
@@ -24,11 +25,11 @@ import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
 import { put } from '../utils/database'
-import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns';
+import { TimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 import { hobbiesList } from '../public/hobbies_list'
-import { validateHeaderValue } from 'http';
-import { matchesMiddleware } from 'next/dist/shared/lib/router/router';
+import { validateHeaderValue } from 'http'
+import { matchesMiddleware } from 'next/dist/shared/lib/router/router'
 
 const initialState = {
   location: '',
@@ -61,67 +62,72 @@ const initialState = {
 }
 
 export default function OnboardPage() {
-  const [selectedHobbies, setSelectedHobbies] = useState();
-  const [selectedWakeDate, setSelectedWakeDate] = useState(new Date('2014-08-18T21:11:54'));
-  const [selectedBedDate, setSelectedBedDate] = useState(new Date('2014-08-18T21:11:54'));
-  function handleHobbies(data : any) {
+  const [selectedHobbies, setSelectedHobbies] = useState()
+  const [selectedWakeDate, setSelectedWakeDate] =
+    useState<MaterialUiPickersDate>(new Date('2014-08-18T21:11:54'))
+  const [selectedBedDate, setSelectedBedDate] = useState<MaterialUiPickersDate>(
+    new Date('2014-08-18T21:11:54')
+  )
+  function handleHobbies(data: any) {
     if (data.length <= 3) {
-      let l : string[] = []
-      data.forEach(function (value : any) {
+      let l: string[] = []
+      data.forEach(function (value: any) {
         l.push(value.label)
-      }); 
-      setSelectedHobbies(data);
-      state.hobb = l;
+      })
+      setSelectedHobbies(data)
+      state.hobb = l
       // TODO: change to actually display hobbies correctly
-      let s : string = ""
-      l.forEach(function (val : string){
-        s += val + " "
-      });
+      let s: string = ''
+      l.forEach(function (val: string) {
+        s += val + ' '
+      })
       state.hobbies = s
-    } 
+    }
   }
 
-  const handleWakeDateChange = (date : Date) => {
-    setSelectedWakeDate(date);
-    state.wakeuptime = '' + date.getHours();
-  };
-  const handleBedDateChange = (date : Date) => {
-    setSelectedBedDate(date);
-    state.bedtime = '' + date.getHours();
-  };
+  const handleWakeDateChange = (date: MaterialUiPickersDate) => {
+    setSelectedWakeDate(date)
+    state.wakeuptime = '' + date?.getHours()
+  }
+  const handleBedDateChange = (date: MaterialUiPickersDate) => {
+    setSelectedBedDate(date)
+    state.bedtime = '' + date?.getHours()
+  }
   const [collegeList, setCollegeList] = useState([])
   const [cityList, setCityList] = useState([])
   useEffect(() => {
     try {
       fetch('http://universities.hipolabs.com/search?country=United%20States')
-      .then(response => response.json())
-      .then(collegeData => {
-        var collegeDataNames = collegeData.map(function(item : any,index : any){
-          return item["name"];
+        .then((response) => response.json())
+        .then((collegeData) => {
+          var collegeDataNames = collegeData.map(function (
+            item: any,
+            index: any
+          ) {
+            return item['name']
+          })
+          setCollegeList(collegeDataNames)
         })
-        setCollegeList(collegeDataNames)});
-    }
-    catch (error) {
-      console.log("Unable to connect to universities API.")
+    } catch (error) {
+      console.log('Unable to connect to universities API.')
       setCollegeList([])
     }
 
     try {
       fetch('https://countriesnow.space/api/v0.1/countries')
-        .then(response => response.json())
-        .then(cityData => {
-          cityData["data"].map(function(item : any,index : any){
-            if (item["country"] == "United States") {
-              setCityList(item["cities"])
+        .then((response) => response.json())
+        .then((cityData) => {
+          cityData['data'].map(function (item: any, index: any) {
+            if (item['country'] == 'United States') {
+              setCityList(item['cities'])
             }
           })
-          });
-    }
-    catch {
-      console.log("Unable to connect to cities API.")
+        })
+    } catch {
+      console.log('Unable to connect to cities API.')
       setCityList([])
     }
-  }, []);
+  }, [])
   const { user, setUser } = useContext(UserContext)
   const router = useRouter()
 
@@ -143,7 +149,11 @@ export default function OnboardPage() {
         router.push('/dashboard')
       }
     } else {
-      alert("You are missing " + missing + ". Please fill out that field and then come back")
+      alert(
+        'You are missing ' +
+          missing +
+          '. Please fill out that field and then come back'
+      )
     }
   }
   console.log(matches)
@@ -151,7 +161,7 @@ export default function OnboardPage() {
     for (const [key, value] of Object.entries(state)) {
       if (value.length == 0) return key
     }
-    return ""
+    return ''
   }
   return (
     <>
@@ -159,7 +169,13 @@ export default function OnboardPage() {
       <Typography variant="h4" style={{ margin: '1rem' }}>
         👋 Welcome {user?.firstName} {user?.lastName}
       </Typography>
-        <Box style={{ padding: '1rem 3rem', maxWidth: !matches ? '50%' : '100%', margin: 'auto'}}>
+      <Box
+        style={{
+          padding: '1rem 3rem',
+          maxWidth: !matches ? '50%' : '100%',
+          margin: 'auto',
+        }}
+      >
         <FormSelect
           id="location"
           label="Where are you moving to?"
@@ -249,21 +265,23 @@ export default function OnboardPage() {
           updateState={updateState}
         />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <TimePicker 
-            autoOk 
+          <TimePicker
+            autoOk
             fullWidth
-            label="What time do you wake up?" 
-            value={selectedWakeDate} 
+            label="What time do you wake up?"
+            value={selectedWakeDate}
             style={{ marginBottom: '1rem' }}
-            onChange={handleWakeDateChange} />
+            onChange={handleWakeDateChange}
+          />
         </MuiPickersUtilsProvider>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <TimePicker 
-            autoOk 
+          <TimePicker
+            autoOk
             fullWidth
-            label="What time do you go to sleep?" 
-            value={selectedBedDate} 
-            onChange={handleBedDateChange} />
+            label="What time do you go to sleep?"
+            value={selectedBedDate}
+            onChange={handleBedDateChange}
+          />
         </MuiPickersUtilsProvider>
         <FormSelect
           id="trash"
@@ -283,7 +301,6 @@ export default function OnboardPage() {
           label="What are your hobbies? Pick up to 3."
           value={selectedHobbies}
           updateState={handleHobbies}
-          items={hobbiesList}
         />
         <FormSelect
           id="weed_apartment"
@@ -323,57 +340,35 @@ export default function OnboardPage() {
           id="shared_room"
           label="Do you mind a shared room with your roommate at a cheaper price?"
           value={state.shared_room}
-          items={[
-            'Yes',
-            'No'
-          ]}
+          items={['Yes', 'No']}
           updateState={updateState}
         />
         <FormSelect
           id="bathroom"
           label="How much time do you spend in the bathroom in the morning?"
           value={state.bathroom}
-          items={[
-            '< 5 min',
-            '< 15 min',
-            '< 30 min',
-            'more than 30 min'
-          ]}
+          items={['< 5 min', '< 15 min', '< 30 min', 'more than 30 min']}
           updateState={updateState}
         />
         <FormSelect
           id="leftovers"
           label="When do you throw away leftovers?"
           value={state.leftovers}
-          items={[
-            '< 5 min',
-            '< 15 min',
-            '< 30 min',
-            'more than 30 min'
-          ]}
+          items={['< 5 min', '< 15 min', '< 30 min', 'more than 30 min']}
           updateState={updateState}
         />
         <FormSelect
           id="common_space_things"
           label="Should you inform your roommate before putting things in the common space?"
           value={state.common_space_things}
-          items={[
-            'Yes',
-            'No'
-          ]}
+          items={['Yes', 'No']}
           updateState={updateState}
         />
         <FormSelect
           id="parties"
           label="How many parties / month do you plan on having?"
           value={state.parties}
-          items={[
-            '0',
-            '1',
-            '2',
-            '< 3',
-            'At least once a week'
-          ]}
+          items={['0', '1', '2', '< 3', 'At least once a week']}
           updateState={updateState}
         />
         <FormSelect
@@ -385,8 +380,8 @@ export default function OnboardPage() {
             'Loud',
             'Quiet at night, loud during the day',
             'Quiet during the day, loud at night',
-            "Quiet on weekdays, loud on the weekends",
-            "Don't really mind adjusting to either"
+            'Quiet on weekdays, loud on the weekends',
+            "Don't really mind adjusting to either",
           ]}
           updateState={updateState}
         />

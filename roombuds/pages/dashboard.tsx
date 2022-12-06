@@ -52,7 +52,7 @@ const DashboardPage = () => {
           <Grid item xs={12} sm={6} md={6}>
             <Card variant="outlined" style={{ padding: '2rem' }}>
               <Typography variant="h5">
-                About {user.firstName} {user.lastName}
+                About {user?.firstName} {user?.lastName}
               </Typography>
               <Grid container>
                 <Grid item xs={12} sm={6} md={6}>
