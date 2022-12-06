@@ -151,8 +151,8 @@ export default function OnboardPage() {
     } else {
       alert(
         'You are missing ' +
-          missing +
-          '. Please fill out that field and then come back'
+        missing +
+        '. Please fill out that field and then come back'
       )
     }
   }

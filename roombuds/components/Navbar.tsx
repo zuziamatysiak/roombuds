@@ -36,12 +36,12 @@ export const Navbar = () => {
           >
             Log in
           </Button>
-        ) : ( <div> {!user.verified && user.email?.length > 0 ? (
+        ) : (<div> {!user.verified && user.email?.length > 0 ? (
           <Button
             style={{
               backgroundColor: '#459b55',
               color: 'white',
-              marginRight : 20
+              marginRight: 20
             }}
             variant="contained"
             onClick={() => {
@@ -64,7 +64,7 @@ export const Navbar = () => {
           >
             Log out
           </Button>
-          </div>
+        </div>
         )}
       </Toolbar>
     </AppBar>

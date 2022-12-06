@@ -30,7 +30,7 @@ export const FormTextField = ({
       value={value}
       required={required}
       fullWidth={fullWidth}
-      type = {type}
+      type={type}
       onChange={(e) => updateState({ [id]: e.target.value })}
       style={{ marginBottom: '1rem' }}
     />
