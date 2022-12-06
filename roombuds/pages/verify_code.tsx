@@ -11,7 +11,8 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
-
+import { update } from '../utils/database'
+import { USER_TABLE } from '../utils/constants'
 import { GetResponse } from '../utils/types'
 
 const validateCode = async (
@@ -32,9 +33,14 @@ export default function VerifyCodePage() {
         const resp = await validateCode(codeInput)
         if (resp.success) {
             const userInfo = {...user,...{verified: true}}
-            // TODO: Actually update verified in database
-            setUser(userInfo)
-            router.push('/dashboard')
+            const resp = await update({verified: true}, 'email', user.email, USER_TABLE)
+            if (resp.success) {
+                setUser(userInfo)
+                router.push('/dashboard')
+            }
+        } else {
+            alert('Please enter the correct verification code.')
+            // TODO: Button to resend code
         }
     }
 
