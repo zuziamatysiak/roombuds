@@ -11,16 +11,26 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
-import { update } from '../utils/database'
-import { USER_TABLE } from '../utils/constants'
+import { get, update } from '../utils/database'
+import { USER_TABLE, VERIFICATION_CODE_TABLE } from '../utils/constants'
 import { GetResponse } from '../utils/types'
 
 const validateCode = async (
+    email: string,
     code: string
   ): Promise<GetResponse> => {
-    // TODO: Actually verify code
-    console.log("Correct verification code: " + code)
-    return {success: true}
+    const codeInfo = await get('email', email, VERIFICATION_CODE_TABLE)
+    if (!codeInfo.success) {
+        return { success: false, errorMessage: codeInfo.errorMessage }
+    } else {
+        if (codeInfo.data == null) {
+            return { success: false, errorMessage: 'Verification code expired or not sent'};
+        } else if (code == codeInfo.data.code) {
+            return { success: true }
+        } else {
+            return { success: false, errorMessage: 'Wrong verification code' }
+        }
+    }
 }
 
 export default function VerifyCodePage() {
@@ -30,7 +40,7 @@ export default function VerifyCodePage() {
     const [codeInput, setCodeInput] = useState('')
 
     const handleSubmit = async () => {
-        const resp = await validateCode(codeInput)
+        const resp = await validateCode(user.email, codeInput)
         if (resp.success) {
             const userInfo = {...user,...{verified: true}}
             const resp = await update({verified: true}, 'email', user.email, USER_TABLE)
@@ -39,6 +49,7 @@ export default function VerifyCodePage() {
                 router.push('/dashboard')
             }
         } else {
+            console.log(resp.errorMessage)
             alert('Please enter the correct verification code.')
             // TODO: Button to resend code
         }
