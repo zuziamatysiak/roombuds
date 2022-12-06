@@ -36,8 +36,21 @@ export const Navbar = () => {
           >
             Log in
           </Button>
-        ) : (
-          // TODO: implement logout (hacky rn)
+        ) : ( <div> {!user.verified && user.email?.length > 0 ? (
+          <Button
+            style={{
+              backgroundColor: '#459b55',
+              color: 'white',
+              marginRight : 20
+            }}
+            variant="contained"
+            onClick={() => {
+              router.push('/verify')
+            }}
+          >
+            Verify
+          </Button>
+        ) : ''}
           <Button
             style={{
               backgroundColor: '#459b55',
@@ -51,6 +64,7 @@ export const Navbar = () => {
           >
             Log out
           </Button>
+          </div>
         )}
       </Toolbar>
     </AppBar>
