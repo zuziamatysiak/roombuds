@@ -16,3 +16,9 @@ export interface GetResponse {
   data?: any
   errorMessage?: string
 }
+
+// response object from send email request
+export interface SendResponse {
+  success: boolean
+  errorMessage?: string
+}

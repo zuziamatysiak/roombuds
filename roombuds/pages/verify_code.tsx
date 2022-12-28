@@ -66,7 +66,7 @@ export default function VerifyCodePage() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-          <Typography variant="h5" style={{ marginBottom: 20, textAlign: 'center' }}>Enter verification code sent to {user.verifiedEmail} 🌱</Typography>
+          <Typography variant="h5" style={{ marginBottom: 20, textAlign: 'center' }}>Enter the verification code sent to {user.verifiedEmail} 🌱</Typography>
           <TextField
             id="code"
             onChange={(e) => {

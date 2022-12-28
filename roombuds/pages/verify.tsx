@@ -13,6 +13,7 @@ import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
 import { put } from '../utils/database'
 import { VERIFICATION_CODE_TABLE } from '../utils/constants'
+import { sendVerificationEmail } from '../utils/verification'
 
 const initialState = {
   college: '',
@@ -64,11 +65,14 @@ export default function VerifyPage() {
 
       } else {
         // TODO: add expiration time
-        const resp = await put({ email: user.email, code: generateCode() }, VERIFICATION_CODE_TABLE)
+        const code = generateCode()
+        const resp = await put({ email: user.email, code: code }, VERIFICATION_CODE_TABLE)
         if (resp.success) {
-          // TODO: send email
           setUser({ ...user, ... { verifiedEmail: state.verifiedEmail } })
-          router.push('/verify_code')
+          const verResp = await sendVerificationEmail(user.verifiedEmail, code)
+          if (verResp.success) {
+            router.push('/verify_code')
+          }
         } else {
           alert('Unable to send verification code at this time. Please try again later.')
         }
