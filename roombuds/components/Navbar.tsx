@@ -25,7 +25,7 @@ export const Navbar = () => {
             <Image src="/logo.png" alt="logo" width={190} height={60} />
           </div>
         </Typography>
-        {!user ? (
+        {!user || !user.email ? (
           <Button
             style={{
               backgroundColor: '#459b55',
@@ -41,7 +41,7 @@ export const Navbar = () => {
             style={{
               backgroundColor: '#459b55',
               color: 'white',
-              marginRight: 20
+              marginRight: '1em'
             }}
             variant="contained"
             onClick={() => {
@@ -51,6 +51,22 @@ export const Navbar = () => {
             Verify
           </Button>
         ) : ''}
+          {user.email?.length > 0 ? (
+            <Button
+              style={{
+                backgroundColor: '#459b55',
+                color: 'white',
+                marginRight: '1em'
+              }}
+              variant="contained"
+              onClick={() => {
+                router.push('/quizzes')
+              }}
+            >
+              Quizzes
+            </Button>
+          ) : ''}
+
           <Button
             style={{
               backgroundColor: '#459b55',
