@@ -71,6 +71,23 @@ export const get = async (
 
 /**
  *
+ * @param keyName key name of lookup (e.g. "email")
+ * @param keyVal key value of lookup (e.g. "test@test.com")
+ * @param table table name (e.g. Users)
+ * @returns GetResponse {success: boolean, data: any, errorMessage?: string}
+ */
+export const getAll = async (
+  table: string
+): Promise<GetResponse> => {
+  var params = {
+    TableName: table,
+  }
+  const resp = await docClient.scan(params).promise();
+  return { success: true, data: resp.Items }
+}
+
+/**
+ *
  * @param data data to update into table (e.g. {"verified": "true"})
  * @param keyName key name of lookup (e.g. "email")
  * @param keyVal key value of lookup (e.g. "test@test.com")
