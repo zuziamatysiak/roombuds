@@ -24,7 +24,7 @@ import { FormSelectReact } from '../components/FormSelectReact'
 import { Navbar } from '../components/Navbar'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
-import { put } from '../utils/database'
+import { put, update } from '../utils/database'
 import { TimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { hobbiesList } from '../public/hobbies_list'
@@ -94,6 +94,11 @@ export default function OnboardPage() {
     state.bedtime = '' + date?.getHours()
   }
   const [collegeList, setCollegeList] = useState([])
+  const [selectedCollege, setSelectedCollege] = useState()
+  function handleCollege(data: any) {
+    setSelectedCollege(data)
+    state.college = data.label
+  }
   const [cityList, setCityList] = useState([])
   useEffect(() => {
     try {
@@ -104,7 +109,7 @@ export default function OnboardPage() {
             item: any,
             index: any
           ) {
-            return item['name']
+            return { value: index, label: item['name'] }
           })
           setCollegeList(collegeDataNames)
         })
@@ -197,12 +202,13 @@ export default function OnboardPage() {
           ]}
           updateState={updateState}
         />
-        <FormSelect
-          id="college"
+        <FormSelectReact
+          options={collegeList}
           label="Where did you go to college?"
-          value={state.college}
-          items={collegeList}
-          updateState={updateState}
+          value={selectedCollege}
+          updateState={handleCollege}
+          placeholder={"Search for your college..."}
+          isMulti={false}
         />
         <FormTextField
           id="company"
@@ -298,9 +304,11 @@ export default function OnboardPage() {
         />
         <FormSelectReact
           options={hobbiesList}
-          label="What are your hobbies? Pick up to 3."
+          label="What are your hobbies?"
           value={selectedHobbies}
           updateState={handleHobbies}
+          placeholder={"Pick up to 3..."}
+          isMulti={true}
         />
         <FormSelect
           id="weed_apartment"

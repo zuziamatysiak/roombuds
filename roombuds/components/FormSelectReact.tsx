@@ -18,11 +18,15 @@ export const FormSelectReact = ({
   value,
   updateState,
   options,
+  placeholder,
+  isMulti
 }: {
   label: string
-  value: undefined
+  value: any
   options: Array<any>
   updateState: (newState: Object) => void
+  placeholder: string
+  isMulti: boolean
 }) => {
   return (
     <div>
@@ -32,10 +36,10 @@ export const FormSelectReact = ({
           styles={style1}
           options={options}
           onChange={(e) => updateState(e)}
-          placeholder={label}
+          placeholder={placeholder}
           value={value}
           isSearchable={true}
-          isMulti
+          isMulti={isMulti}
         ></Select>
       </FormControl>
     </div>
