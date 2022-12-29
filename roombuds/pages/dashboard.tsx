@@ -37,7 +37,7 @@ const DashboardPage = () => {
             <Card variant="outlined" style={{ padding: '2rem' }}>
               <Typography>
                 Looking for roommates in{' '}
-                <span style={{ fontWeight: 600 }}>{userPrefs.location}</span>
+                <span style={{ fontWeight: 600 }}>{userPrefs.loc_city}, {userPrefs.loc_state}</span>
               </Typography>
               <Typography>
                 Works at{' '}

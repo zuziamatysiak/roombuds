@@ -32,7 +32,8 @@ import { validateHeaderValue } from 'http'
 import { matchesMiddleware } from 'next/dist/shared/lib/router/router'
 
 const initialState = {
-  location: '',
+  loc_state: '',
+  loc_city: '',
   budget: '',
   college: '',
   company: '',
@@ -99,7 +100,40 @@ export default function OnboardPage() {
     setSelectedCollege(data)
     state.college = data.label
   }
+  const [stateList, setStateList] = useState([])
   const [cityList, setCityList] = useState([])
+  const [selectedLocState, setSelectedLocState] = useState()
+  function handleLocState(data: any) {
+    setSelectedLocState(data)
+    state.loc_state = data.label
+
+    try {
+      fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+        method: 'POST',
+        body: JSON.stringify({ country: "United States", state: data.label }),
+        headers: { "Content-Type": "application/json" }
+      })
+        .then((response) => response.json())
+        .then((cityData) => {
+          var cities = cityData['data'].map(function (
+            city: any,
+            index: any
+          ) {
+            return { value: index, label: city }
+          })
+          setCityList(cities)
+        })
+    } catch {
+      console.log('Unable to connect to cities API.')
+      setCityList([])
+    }
+  }
+
+  const [selectedLocCity, setSelectedLocCity] = useState()
+  function handleLocCity(data: any) {
+    setSelectedLocCity(data)
+    state.loc_city = data.label
+  }
   useEffect(() => {
     try {
       fetch('http://universities.hipolabs.com/search?country=United%20States')
@@ -119,18 +153,24 @@ export default function OnboardPage() {
     }
 
     try {
-      fetch('https://countriesnow.space/api/v0.1/countries')
+      fetch('https://countriesnow.space/api/v0.1/countries/states', {
+        method: 'POST',
+        body: JSON.stringify({ country: "United States" }),
+        headers: { "Content-Type": "application/json" }
+      })
         .then((response) => response.json())
-        .then((cityData) => {
-          cityData['data'].map(function (item: any, index: any) {
-            if (item['country'] == 'United States') {
-              setCityList(item['cities'])
-            }
+        .then((stateData) => {
+          var states = stateData['data']['states'].map(function (
+            item: any,
+            index: any
+          ) {
+            return { value: index, label: item['name'] }
           })
+          setStateList(states)
         })
     } catch {
-      console.log('Unable to connect to cities API.')
-      setCityList([])
+      console.log('Unable to connect to states API.')
+      setStateList([])
     }
   }, [])
   const { user, setUser } = useContext(UserContext)
@@ -181,12 +221,21 @@ export default function OnboardPage() {
           margin: 'auto',
         }}
       >
-        <FormSelect
-          id="location"
-          label="Where are you moving to?"
-          value={state.location}
-          items={cityList}
-          updateState={updateState}
+        <FormSelectReact
+          options={stateList}
+          label="Which state are you moving to?"
+          value={selectedLocState}
+          updateState={handleLocState}
+          placeholder={"Search for your state..."}
+          isMulti={false}
+        />
+        <FormSelectReact
+          options={cityList}
+          label="Which city are you moving to?"
+          value={selectedLocCity}
+          updateState={handleLocCity}
+          placeholder={"Search for your city..."}
+          isMulti={false}
         />
         <FormSelect
           id="budget"
