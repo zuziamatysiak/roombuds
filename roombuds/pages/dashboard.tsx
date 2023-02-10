@@ -1,4 +1,5 @@
-import { Box, Card, Grid, Typography } from '@material-ui/core'
+import { Box, Card, Grid, Typography, Button } from '@material-ui/core'
+import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { Subtitle } from '../components/Text'
@@ -9,6 +10,9 @@ import { get } from '../utils/database'
 const DashboardPage = () => {
   const { user, setUser } = useContext(UserContext)
   const [userPrefs, setUserPrefs] = useState<any>({})
+  const randomPicPath = "https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
+  const [filePath, setFilePath] = useState(randomPicPath)
+  const [tempPath, setTempPath] = useState(randomPicPath)
 
   useEffect(() => {
     async function fetchPrefs() {
@@ -25,6 +29,20 @@ const DashboardPage = () => {
     fetchPrefs()
   }, [])
 
+  const myLoader = ({ src, width, quality }) => {
+    return filePath + "/${src}?w=${width}&q=${quality || 75}"
+  }
+
+  // TODO: later change it to save a file as opposed to saving a link
+  function onFileChange(data: any) {
+    setTempPath(data.target.value)
+  }
+
+  // TODO: once AWS works, save it in the database
+  function onFileSubmit(data: any) {
+    setFilePath(tempPath)
+  }
+
   return (
     <>
       <Navbar />
@@ -35,6 +53,26 @@ const DashboardPage = () => {
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6} md={6}>
             <Card variant="outlined" style={{ padding: '2rem' }}>
+              <Image
+              // TODO: improve UI
+                loader={myLoader}
+                src="profile.png"
+                // src = {""}
+                alt="profile_picture"
+                width={200}
+                height={200}
+                style = {{alignContent: 'center'}}
+              />
+              <Typography style = {{fontSize: 12}}>
+                  Change your profile picture by providing a link to your pic.
+                </Typography>
+              <input type="form" onChange={onFileChange}/>
+              <Button 
+                variant="contained" 
+                onClick={onFileSubmit}
+                style ={{margin: '0.5rem', maxHeight: '20px', minHeight: '20px'}}>
+                  Change picture
+              </Button>
               <Typography>
                 Looking for roommates in{' '}
                 <span style={{ fontWeight: 600 }}>{userPrefs.loc_city}, {userPrefs.loc_state}</span>
