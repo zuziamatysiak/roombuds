@@ -24,6 +24,7 @@ export const put = async (data: any, table: string): Promise<PutResponse> => {
     TableName: table,
     Item: data,
   }
+  console.log(table)
 
   try {
     await docClient.put(params).promise()

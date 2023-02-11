@@ -4,13 +4,14 @@ import { useContext, useEffect, useState } from 'react'
 import { Navbar } from '../components/Navbar'
 import { Subtitle } from '../components/Text'
 import { UserContext } from '../utils/auth'
-import { USER_PREFERENCES_TABLE } from '../utils/constants'
-import { get } from '../utils/database'
+import { USER_PREFERENCES_TABLE, USER_PROFILE_PICTURES, RANDOM_PATH } from '../utils/constants'
+import { get, put } from '../utils/database'
 
 const DashboardPage = () => {
   const { user, setUser } = useContext(UserContext)
   const [userPrefs, setUserPrefs] = useState<any>({})
-  const randomPicPath = "https://images.unsplash.com/photo-1488161628813-04466f872be2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=928&q=80"
+  // TODO: maybe as a stretch at the start everyone could get a random plant picture 
+  const randomPicPath = RANDOM_PATH
   const [filePath, setFilePath] = useState(randomPicPath)
   const [tempPath, setTempPath] = useState(randomPicPath)
 
@@ -25,11 +26,30 @@ const DashboardPage = () => {
       } catch (e) {
         console.error(e)
       }
+    };
+    async function fetchProfilePic() {
+      try {
+        const response = await get('email', user.email, USER_PROFILE_PICTURES)
+        if (response.success) {
+          setFilePath(response.data.tempPath)
+        } else {
+          setFilePath(RANDOM_PATH)
+        }
+      }
+      catch (e) {
+        console.error(e)
+        setFilePath(RANDOM_PATH)
+      }
     }
     fetchPrefs()
+    fetchProfilePic()
   }, [])
 
+  // TODO: add picture cropping instead of squashing
   const myLoader = ({ src, width, quality }) => {
+    console.log(filePath)
+    if (filePath == undefined) setFilePath(RANDOM_PATH)
+    // TODO: Add check if someone added a valid URL
     return filePath + "/${src}?w=${width}&q=${quality || 75}"
   }
 
@@ -41,6 +61,8 @@ const DashboardPage = () => {
   // TODO: once AWS works, save it in the database
   function onFileSubmit(data: any) {
     setFilePath(tempPath)
+    const pic = { email: user.email, tempPath}
+    put(pic, USER_PROFILE_PICTURES)
   }
 
   return (

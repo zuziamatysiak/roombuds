@@ -92,11 +92,11 @@ export default function OnboardPage() {
           ) {
             return { value: index, label: city }
           })
+          console.log(cities)
           setCityList(cities)
         })
     } catch {
       console.log('Unable to connect to cities API.')
-      setCityList([])
     }
   }
 
