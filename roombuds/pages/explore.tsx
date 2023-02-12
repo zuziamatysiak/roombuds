@@ -14,6 +14,7 @@ TODO:
 - when clicking transfer to another website
 - generalize mergeTable
 - enable search
+- fix image sizing
 */
 const ExplorePage = () => {
     const { user, setUser } = useContext(UserContext)
