@@ -132,8 +132,6 @@ export const scanTable = async (table: string) => {
       items.Items.forEach((item) => scanResults.push(item));
       params.ExclusiveStartKey  = items.LastEvaluatedKey;
   } while(typeof items.LastEvaluatedKey !== "undefined");
-  
 
   return scanResults;
-
 };
