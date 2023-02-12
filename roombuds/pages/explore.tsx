@@ -16,7 +16,7 @@ const ExplorePage = () => {
     // TODO: add error checking
     const people = scanTable(USER_PREFERENCES_TABLE)
     var peopleList = []
-    peopleList.then((val) => peopleList.push(val));
+    people.then((val) => peopleList.push(val));
 
   return (
     <>
