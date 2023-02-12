@@ -8,6 +8,13 @@ import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE, USER_PROFILE_PICTURES, RANDOM_PATH, USER_TABLE } from '../utils/constants'
 import { get, mergeTables, put, scanTable } from '../utils/database'
 
+/*
+TODO: 
+- add error checking
+- when clicking transfer to another website
+- generalize mergeTable
+- enable search
+*/
 const ExplorePage = () => {
     const { user, setUser } = useContext(UserContext)
     const myLoader = ({ src, width, quality }) => {
