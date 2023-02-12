@@ -1,51 +1,34 @@
 import { Box, Card, Grid, Typography, Button } from '@material-ui/core'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
+import { mergeStyles } from 'react-select'
 import { Navbar } from '../components/Navbar'
 import { Subtitle } from '../components/Text'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE, USER_PROFILE_PICTURES, RANDOM_PATH, USER_TABLE } from '../utils/constants'
-import { get, put, scanTable } from '../utils/database'
+import { get, mergeTables, put, scanTable } from '../utils/database'
 
 const ExplorePage = () => {
     const { user, setUser } = useContext(UserContext)
     const myLoader = ({ src, width, quality }) => {
-        return RANDOM_PATH + "/${src}?w=${width}&q=${quality || 75}"
+        return src + "/${src}?w=${width}&q=${quality || 75}"
     }
 
     // TODO: add error checking
     const [peopleList, setPeopleList] = useState([])
-    const [peopleNameList, setPeopleNameList] = useState([])
     useEffect(() => {
         async function getPeople() {
             try {
-                const people = await scanTable(USER_PREFERENCES_TABLE)
+                const people = await mergeTables(USER_PREFERENCES_TABLE, USER_TABLE, USER_PROFILE_PICTURES)
                 setPeopleList(people)
-              } catch (e) {
-                console.error(e)
-              }
-        }; 
-        async function getNames() {
-            try {
-                const peopleNames = await scanTable(USER_TABLE)
-                var peopleTemp = []
-                for (var i = 0; i < peopleList.length; i++) {
-                    for (var j = 0; j < peopleNames.length; j++) {
-                        if (peopleList[i].email == peopleNames[j].email) {
-                            peopleTemp.push(peopleNames[j])
-                        }
-                    }
-                }
-                setPeopleNameList(peopleTemp)
-            } catch (e) {
+            } catch(e) {
                 console.error(e)
             }
         }
         getPeople()
-        getNames()
     }, [])
 
-    console.log(peopleNameList)
+
   return (
     <>
       <Navbar />
@@ -57,19 +40,31 @@ const ExplorePage = () => {
             <Grid item xs={2} sm={4} md={4} lg ={4} key={index}>
                 <Card style={{width: "90%"}}>
                     <Grid container>
-                        <Image
-                        // TODO: improve UI
-                        loader={myLoader}
-                        src="profile.png"
-                        alt="profile_picture"
-                        width={200}
-                        height={200}
-                        style = {{alignContent: 'center'}}
-                        />
+                        {peopleList[index].tempPath !== undefined ? 
+                            <Image
+                            // TODO: improve UI
+                            loader={myLoader}
+                            src={peopleList[index].tempPath}
+                            alt="profile_picture"
+                            width={200}
+                            height={200}
+                            style = {{alignContent: 'center'}}
+                            /> :
+                            <Image
+                            // TODO: improve UI
+                            loader={myLoader}
+                            src={RANDOM_PATH}
+                            alt="profile_picture"
+                            width={200}
+                            height={200}
+                            style = {{alignContent: 'center'}}
+                            /> 
+                        }
                         <div style = {{marginLeft:"3rem", marginTop: "2rem"}}>
                             <Typography>
-                                {peopleNameList.length > index ? 
-                                <span style={{ fontWeight: 600 }}>{peopleNameList[index].firstName}</span> : 
+                                {peopleList[index].firstName !== undefined? 
+                                <span style={{ fontWeight: 600 }}>{peopleList[index].firstName}</span> 
+                                 : 
                                 <span style={{ fontWeight: 600 }}></span> }
                             </Typography>
                             <Typography>

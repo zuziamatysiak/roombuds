@@ -135,3 +135,34 @@ export const scanTable = async (table: string) => {
 
   return scanResults;
 };
+
+// TODO: generalize
+export const mergeTables = async (table1: string, table2 : string, table3: string) => {
+  const res1 = await scanTable(table1)
+  const res2 = await scanTable(table2)
+  const res3 = await scanTable(table3)
+
+  const scanResults = []
+
+  // TODO: add error checls
+  for (var i = 0; i < res1.length; i++) {
+    var curr = res1[i]
+    for (var j = 0; j <res2.length; j++) {
+      if (curr.email == res2[j].email) {
+        curr.firstName = res2[j].firstName
+      }
+    }
+
+    for (var j = 0; j <res3.length; j++) {
+      if (curr.email == res3[j].email) {
+        curr.tempPath = res3[j].tempPath
+      }
+    }
+
+    scanResults.push(curr)
+  }
+
+  console.log("banana")
+  console.log(scanResults)
+  return scanResults;
+};
