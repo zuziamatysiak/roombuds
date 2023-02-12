@@ -1,3 +1,4 @@
+import { isTemplateSpan } from 'typescript'
 import { accessKeyId, secretAccessKey } from './secrets'
 import { GetResponse, PutResponse } from './types'
 
@@ -118,3 +119,21 @@ export const update = async (
     }
   }
 }
+
+export const scanTable = async (table: string) => {
+  const params = {
+      TableName: table,
+  };
+
+  const scanResults = [];
+  var items;
+  do {
+      items =  await docClient.scan(params).promise();
+      items.Items.forEach((item) => scanResults.push(item));
+      params.ExclusiveStartKey  = items.LastEvaluatedKey;
+  } while(typeof items.LastEvaluatedKey !== "undefined");
+  
+
+  return scanResults;
+
+};

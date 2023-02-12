@@ -5,13 +5,18 @@ import { Navbar } from '../components/Navbar'
 import { Subtitle } from '../components/Text'
 import { UserContext } from '../utils/auth'
 import { USER_PREFERENCES_TABLE, USER_PROFILE_PICTURES, RANDOM_PATH } from '../utils/constants'
-import { get, put } from '../utils/database'
+import { get, put, scanTable } from '../utils/database'
 
 const ExplorePage = () => {
     const { user, setUser } = useContext(UserContext)
     const myLoader = ({ src, width, quality }) => {
         return RANDOM_PATH + "/${src}?w=${width}&q=${quality || 75}"
     }
+
+    // TODO: add error checking
+    const people = scanTable(USER_PREFERENCES_TABLE)
+    var peopleList = []
+    peopleList.then((val) => peopleList.push(val));
 
   return (
     <>
