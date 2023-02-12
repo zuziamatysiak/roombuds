@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 
 export const Navbar = () => {
   const { user, setUser } = useContext(UserContext)
+  console.log("hello")
   console.log(user)
 
   const router = useRouter()
@@ -66,7 +67,20 @@ export const Navbar = () => {
               Quizzes
             </Button>
           ) : ''}
-
+          <Button
+            style={{
+              backgroundColor: '#459b55',
+              color: 'white',
+              marginRight: '1em'
+            }}
+            variant="contained"
+            onClick={() => {
+              setUser(null)
+              router.push('/explore')
+            }}
+          >
+            Explore
+          </Button>
           <Button
             style={{
               backgroundColor: '#459b55',

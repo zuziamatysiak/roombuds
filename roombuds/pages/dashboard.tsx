@@ -58,7 +58,6 @@ const DashboardPage = () => {
     setTempPath(data.target.value)
   }
 
-  // TODO: once AWS works, save it in the database
   function onFileSubmit(data: any) {
     setFilePath(tempPath)
     const pic = { email: user.email, tempPath}
@@ -79,7 +78,6 @@ const DashboardPage = () => {
               // TODO: improve UI
                 loader={myLoader}
                 src="profile.png"
-                // src = {""}
                 alt="profile_picture"
                 width={200}
                 height={200}
