@@ -8,67 +8,10 @@ import { USER_PREFERENCES_TABLE, USER_PROFILE_PICTURES, RANDOM_PATH } from '../u
 import { get, put } from '../utils/database'
 
 const ExplorePage = () => {
-  const { user, setUser } = useContext(UserContext)
-//   const [userPrefs, setUserPrefs] = useState<any>({})
-//   // TODO: maybe as a stretch at the start everyone could get a random plant picture 
-//   const randomPicPath = RANDOM_PATH
-//   const [filePath, setFilePath] = useState(randomPicPath)
-//   const [tempPath, setTempPath] = useState(randomPicPath)
-
-//   useEffect(() => {
-//     async function fetchPrefs() {
-//       try {
-//         const response = await get('email', user.email, USER_PREFERENCES_TABLE)
-//         console.log(response)
-//         if (response.success) {
-//           setUserPrefs(response.data)
-//         }
-//       } catch (e) {
-//         console.error(e)
-//       }
-//     };
-//     async function fetchProfilePic() {
-//       try {
-//         const response = await get('email', user.email, USER_PROFILE_PICTURES)
-//         if (response.success) {
-//           setFilePath(response.data.tempPath)
-//         } else {
-//           setFilePath(RANDOM_PATH)
-//         }
-//       }
-//       catch (e) {
-//         console.error(e)
-//         setFilePath(RANDOM_PATH)
-//       }
-//     }
-//     fetchPrefs()
-//     fetchProfilePic()
-//   }, [])
-
-//   // TODO: add picture cropping instead of squashing
-//   const myLoader = ({ src, width, quality }) => {
-//     console.log(filePath)
-//     if (filePath == undefined) setFilePath(RANDOM_PATH)
-//     // TODO: Add check if someone added a valid URL
-//     return filePath + "/${src}?w=${width}&q=${quality || 75}"
-//   }
-
-//   // TODO: later change it to save a file as opposed to saving a link
-//   function onFileChange(data: any) {
-//     setTempPath(data.target.value)
-//   }
-
-//   // TODO: once AWS works, save it in the database
-//   function onFileSubmit(data: any) {
-//     setFilePath(tempPath)
-//     const pic = { email: user.email, tempPath}
-//     put(pic, USER_PROFILE_PICTURES)
-//   }
-console.log("X")
-console.log(user)
-const myLoader = ({ src, width, quality }) => {
-    return RANDOM_PATH + "/${src}?w=${width}&q=${quality || 75}"
-}
+    const { user, setUser } = useContext(UserContext)
+    const myLoader = ({ src, width, quality }) => {
+        return RANDOM_PATH + "/${src}?w=${width}&q=${quality || 75}"
+    }
 
   return (
     <>
@@ -110,8 +53,8 @@ const myLoader = ({ src, width, quality }) => {
                     </Grid>
                 </Card>
             </Grid>
-  ))}
-</Grid>
+        ))}
+    </Grid>
     </>
   )
 }
