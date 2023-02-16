@@ -104,8 +104,8 @@ export const update = async (
     },
     UpdateExpression: updateExpression,
     ExpressionAttributeNames: ExpressionAttributeNames,
-    ExpressionAttributeValues: ExpressionAttributeValues
-  };
+    ExpressionAttributeValues: ExpressionAttributeValues,
+  }
 
   try {
     await docClient.update(params).promise()

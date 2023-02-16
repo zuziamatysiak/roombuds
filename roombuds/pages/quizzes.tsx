@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
 import { Navbar } from '../components/Navbar'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
 import { update } from '../utils/database'
 
@@ -34,7 +34,7 @@ const initialState = {
 
 const QuizzesPage = () => {
   const router = useRouter()
-  const { user, setUser } = useContext(UserContext)
+  const [user, setUser] = useUser()
   const [userPrefs, setUserPrefs] = useState(initialState)
   const updateState = useCallback((newState: any) => {
     setUserPrefs((currentState) => ({ ...currentState, ...newState }))
@@ -44,16 +44,24 @@ const QuizzesPage = () => {
 
   const handleSubmit = async () => {
     // only update if filled in
-    var prefsToUpdate = Object.fromEntries(Object.entries(userPrefs).filter(([_, v]) => v.toString().trim().length == 0))
+    var prefsToUpdate = Object.fromEntries(
+      Object.entries(userPrefs).filter(
+        ([_, v]) => v.toString().trim().length == 0
+      )
+    )
     if (Object.keys(prefsToUpdate).length > 0) {
-      const resp = await update(prefsToUpdate, 'email', user.email, USER_PREFERENCES_TABLE)
+      const resp = await update(
+        prefsToUpdate,
+        'email',
+        user?.email,
+        USER_PREFERENCES_TABLE
+      )
       if (!resp.success) {
         console.log(resp.errorMessage)
       }
     }
-    router.push('/dashboard')
+    router.push('/profile')
   }
-
 
   return (
     <>

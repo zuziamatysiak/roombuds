@@ -8,11 +8,11 @@ import {
   Box,
   Container,
 } from '@material-ui/core'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { get } from '../utils/database'
 import { USER_TABLE } from '../utils/constants'
 import { useRouter } from 'next/router'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 import { GetResponse } from '../utils/types'
 
 // function to query database for user with email
@@ -42,8 +42,13 @@ const validateLogin = async (
 }
 
 export default function LoginPage() {
-  const context = useContext(UserContext)
+  const [user, setUser] = useUser()
   const router = useRouter()
+
+  // TODO: redirect to profile if user is already logged in
+  // if (user) {
+  //   router.push('/profile')
+  // }
 
   const [emailInput, setEmailInput] = useState('')
   const [passwordInput, setPassInput] = useState('')
@@ -52,13 +57,13 @@ export default function LoginPage() {
     const resp = await validateLogin(emailInput, passwordInput)
     if (resp.success) {
       // save user info to context
-      context.setUser({
+      setUser({
         firstName: resp.data.firstName,
         lastName: resp.data.lastName,
         email: resp.data.email,
         verified: resp.data.verified,
       })
-      router.push('/dashboard')
+      router.push('/profile')
     }
   }
 
@@ -77,7 +82,6 @@ export default function LoginPage() {
         >
           <Typography variant="h5">Login 🌱</Typography>
           <TextField
-            //   variant="outlined" TODO: fix potentially
             id="email"
             label="Email Address"
             required
@@ -88,7 +92,6 @@ export default function LoginPage() {
             }}
           />
           <TextField
-            //   variant="outlined"
             label="Password"
             type="password"
             id="password"

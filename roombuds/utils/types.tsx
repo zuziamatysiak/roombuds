@@ -2,6 +2,15 @@ export interface User {
   email: string
   firstName: string
   lastName: string
+  verified: boolean
+  verifiedEmail?: string
+}
+
+export const initialUser: User = {
+  email: '',
+  firstName: '',
+  lastName: '',
+  verified: false,
 }
 
 // database response object from put request

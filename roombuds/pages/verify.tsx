@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useContext, useState, useEffect } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
 import { Navbar } from '../components/Navbar'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 import { put } from '../utils/database'
 import { VERIFICATION_CODE_TABLE } from '../utils/constants'
 import { sendVerificationEmail } from '../utils/verification'
@@ -22,7 +22,7 @@ const initialState = {
 
 function generateCode() {
   // uhhh apparently there are edge cases where this doesn't work
-  return Math.random().toString(36).substring(2, 8);
+  return Math.random().toString(36).substring(2, 8)
 }
 
 export default function VerifyPage() {
@@ -32,12 +32,11 @@ export default function VerifyPage() {
       fetch('http://universities.hipolabs.com/search?country=United%20States')
         .then((response) => response.json())
         .then((collegeData) => {
-          var collegeDataDomains = new Map<string, string>(collegeData.map(function (
-            item: any,
-            _: any
-          ) {
-            return [item['name'], item['domains']]
-          }))
+          var collegeDataDomains = new Map<string, string>(
+            collegeData.map(function (item: any, _: any) {
+              return [item['name'], item['domains']]
+            })
+          )
           setCollegeMap(collegeDataDomains)
         })
     } catch (error) {
@@ -46,7 +45,7 @@ export default function VerifyPage() {
     }
   }, [])
 
-  const { user, setUser } = useContext(UserContext)
+  const [user, setUser] = useUser()
   const router = useRouter()
 
   const [state, setState] = useState(initialState)
@@ -58,30 +57,39 @@ export default function VerifyPage() {
   const handleSubmit = async () => {
     let missing = stateChecker()
     if (missing.length == 0) {
-      const split = state.verifiedEmail.split("@")
-      if (split.length != 2 || !collegeMap.get(state.college)?.includes(split[1])) {
+      const split = state.verifiedEmail.split('@')
+      if (
+        split.length != 2 ||
+        !collegeMap.get(state.college)?.includes(split[1])
+      ) {
         console.log(collegeMap.get(state.college))
-        alert("Please enter a valid email address for " + state.college)
-
+        alert('Please enter a valid email address for ' + state.college)
       } else {
         // TODO: add expiration time
         const code = generateCode()
-        const resp = await put({ email: user.email, code: code }, VERIFICATION_CODE_TABLE)
+        const resp = await put(
+          { email: user.email, code: code },
+          VERIFICATION_CODE_TABLE
+        )
         if (resp.success) {
-          setUser({ ...user, ... { verifiedEmail: state.verifiedEmail } })
+          // TODO: add verified email field to user in db
+          user.verifiedEmail = state.verifiedEmail
+          setUser(user)
           const verResp = await sendVerificationEmail(user.verifiedEmail, code)
           if (verResp.success) {
             router.push('/verify_code')
           }
         } else {
-          alert('Unable to send verification code at this time. Please try again later.')
+          alert(
+            'Unable to send verification code at this time. Please try again later.'
+          )
         }
       }
     } else {
       alert(
         'You are missing ' +
-        missing +
-        '. Please fill out that field and then come back'
+          missing +
+          '. Please fill out that field and then come back'
       )
     }
   }
@@ -106,14 +114,15 @@ export default function VerifyPage() {
             flexDirection: 'column',
           }}
         >
-          <Typography variant="h5" style={{ marginBottom: 20 }}>Verify your account 🌱</Typography>
+          <Typography variant="h5" style={{ marginBottom: 20 }}>
+            Verify your account 🌱
+          </Typography>
           <FormSelect
             id="college"
             label="Which college do you attend?"
             value={state.college}
             items={Array.from(collegeMap.keys())}
             updateState={updateState}
-
           />
           <FormTextField
             id="verifiedEmail"

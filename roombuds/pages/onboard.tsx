@@ -11,7 +11,7 @@ import { useCallback, useContext, useState, useEffect, Fragment } from 'react'
 import { FormSelect, FormTextField } from '../components/Form'
 import { FormSelectReact } from '../components/FormSelectReact'
 import { Navbar } from '../components/Navbar'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 import { USER_PREFERENCES_TABLE } from '../utils/constants'
 import { put } from '../utils/database'
 import { TimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
@@ -81,15 +81,12 @@ export default function OnboardPage() {
     try {
       fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
         method: 'POST',
-        body: JSON.stringify({ country: "United States", state: data.label }),
-        headers: { "Content-Type": "application/json" }
+        body: JSON.stringify({ country: 'United States', state: data.label }),
+        headers: { 'Content-Type': 'application/json' },
       })
         .then((response) => response.json())
         .then((cityData) => {
-          var cities = cityData['data'].map(function (
-            city: any,
-            index: any
-          ) {
+          var cities = cityData['data'].map(function (city: any, index: any) {
             return { value: index, label: city }
           })
           console.log(cities)
@@ -126,8 +123,8 @@ export default function OnboardPage() {
     try {
       fetch('https://countriesnow.space/api/v0.1/countries/states', {
         method: 'POST',
-        body: JSON.stringify({ country: "United States" }),
-        headers: { "Content-Type": "application/json" }
+        body: JSON.stringify({ country: 'United States' }),
+        headers: { 'Content-Type': 'application/json' },
       })
         .then((response) => response.json())
         .then((stateData) => {
@@ -144,7 +141,8 @@ export default function OnboardPage() {
       setStateList([])
     }
   }, [])
-  const { user, setUser } = useContext(UserContext)
+
+  const [user, setUser] = useUser()
   const router = useRouter()
 
   const [state, setState] = useState(initialState)
@@ -158,17 +156,16 @@ export default function OnboardPage() {
   const handleSubmit = async () => {
     let missing = stateChecker()
     if (missing.length == 0) {
-      const prefs = { email: user.email, ...state }
+      const prefs = { email: user?.email, ...state }
       const resp = await put(prefs, USER_PREFERENCES_TABLE)
       if (resp.success) {
-        // redirect to onboard page
-        router.push('/dashboard')
+        router.push('/profile')
       }
     } else {
       alert(
         'You are missing ' +
-        missing +
-        '. Please fill out that field and then come back'
+          missing +
+          '. Please fill out that field and then come back'
       )
     }
   }
@@ -197,7 +194,7 @@ export default function OnboardPage() {
           label="Which state are you moving to?"
           value={selectedLocState}
           updateState={handleLocState}
-          placeholder={"Search for your state..."}
+          placeholder={'Search for your state...'}
           isMulti={false}
         />
         <FormSelectReact
@@ -205,7 +202,7 @@ export default function OnboardPage() {
           label="Which city are you moving to?"
           value={selectedLocCity}
           updateState={handleLocCity}
-          placeholder={"Search for your city..."}
+          placeholder={'Search for your city...'}
           isMulti={false}
         />
         <FormSelect
@@ -227,7 +224,7 @@ export default function OnboardPage() {
           label="Where did you go to college?"
           value={selectedCollege}
           updateState={handleCollege}
-          placeholder={"Search for your college..."}
+          placeholder={'Search for your college...'}
           isMulti={false}
         />
         <FormTextField
@@ -287,7 +284,7 @@ export default function OnboardPage() {
           label="What are your hobbies?"
           value={selectedHobbies}
           updateState={handleHobbies}
-          placeholder={"Pick up to 3..."}
+          placeholder={'Pick up to 3...'}
           isMulti={true}
         />
         <Button

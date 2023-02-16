@@ -6,14 +6,12 @@ import {
   Typography,
   Button,
 } from '@material-ui/core'
-import { useContext } from 'react'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export const Navbar = () => {
-  const { user, setUser } = useContext(UserContext)
-  console.log("hello")
-  console.log(user)
+  const [user] = useUser()
 
   const router = useRouter()
 
@@ -23,10 +21,12 @@ export const Navbar = () => {
       <Toolbar style={{ justifyContent: 'space-between' }}>
         <Typography variant="h4">
           <div style={{ width: '20%', paddingTop: '5px' }}>
-            <Image src="/logo.png" alt="logo" width={190} height={60} />
+            <Link href={user.email ? '/explore' : '/'}>
+              <Image src="/logo.png" alt="logo" width={190} height={60} />
+            </Link>
           </div>
         </Typography>
-        {!user || !user.email ? (
+        {!user.email ? (
           <Button
             style={{
               backgroundColor: '#459b55',
@@ -37,27 +37,28 @@ export const Navbar = () => {
           >
             Log in
           </Button>
-        ) : (<div> {!user.verified && user.email?.length > 0 ? (
-          <Button
-            style={{
-              backgroundColor: '#459b55',
-              color: 'white',
-              marginRight: '1em'
-            }}
-            variant="contained"
-            onClick={() => {
-              router.push('/verify')
-            }}
-          >
-            Verify
-          </Button>
-        ) : ''}
-          {user.email?.length > 0 ? (
+        ) : (
+          <div>
+            {!user.verified && (
+              <Button
+                style={{
+                  backgroundColor: '#459b55',
+                  color: 'white',
+                  marginRight: '1em',
+                }}
+                variant="contained"
+                onClick={() => {
+                  router.push('/verify')
+                }}
+              >
+                Verify
+              </Button>
+            )}
             <Button
               style={{
                 backgroundColor: '#459b55',
                 color: 'white',
-                marginRight: '1em'
+                marginRight: '1em',
               }}
               variant="contained"
               onClick={() => {
@@ -66,35 +67,33 @@ export const Navbar = () => {
             >
               Quizzes
             </Button>
-          ) : ''}
-          <Button
-            style={{
-              backgroundColor: '#459b55',
-              color: 'white',
-              marginRight: '1em'
-            }}
-            variant="contained"
-            onClick={() => {
-              setUser(null)
-              router.push('/explore')
-            }}
-          >
-            Explore
-          </Button>
-          <Button
-            style={{
-              backgroundColor: '#459b55',
-              color: 'white',
-            }}
-            variant="contained"
-            onClick={() => {
-              setUser(null)
-              router.push('/')
-            }}
-          >
-            Log out
-          </Button>
-        </div>
+            <Button
+              style={{
+                backgroundColor: '#459b55',
+                color: 'white',
+                marginRight: '1em',
+              }}
+              variant="contained"
+              onClick={() => {
+                router.push('/explore')
+              }}
+            >
+              Explore
+            </Button>
+            <Button
+              style={{
+                backgroundColor: '#459b55',
+                color: 'white',
+              }}
+              variant="contained"
+              onClick={() => {
+                localStorage.clear()
+                router.push('/')
+              }}
+            >
+              Log out
+            </Button>
+          </div>
         )}
       </Toolbar>
     </AppBar>

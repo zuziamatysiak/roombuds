@@ -12,18 +12,18 @@ import {
 import { FormTextField } from '../components/Form'
 import { USER_TABLE, RANDOM_PATH, USER_PROFILE_PICTURES } from '../utils/constants'
 import { useRouter } from 'next/router'
-import { UserContext } from '../utils/auth'
+import { useUser } from '../utils/auth'
 
 const initialFormState = {
   email: '',
   password: '',
   firstName: '',
   lastName: '',
-  verified: false
+  verified: false,
 }
 
 export default function SignupPage() {
-  const context = useContext(UserContext)
+  const [user, setUser] = useUser()
 
   const router = useRouter()
   const [state, setState] = useState(initialFormState)
@@ -35,11 +35,11 @@ export default function SignupPage() {
     const resp = await put(state, USER_TABLE)
     if (resp.success) {
       // save user info to context
-      context.setUser({
+      setUser({
         firstName: state.firstName,
         lastName: state.lastName,
         email: state.email,
-        verified: state.verified
+        verified: state.verified,
       })
 
       // redirect to onboard page
@@ -48,7 +48,7 @@ export default function SignupPage() {
     //  TODO: show error message if signup is unsuccessful
 
     // TODO: add error message if unsuccesfully saved random pic
-    const pic = { email: state.email, RANDOM_PATH}
+    const pic = { email: state.email, RANDOM_PATH }
     put(pic, USER_PROFILE_PICTURES)
   }
 
