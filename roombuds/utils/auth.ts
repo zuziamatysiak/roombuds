@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
 
 import type { User } from './types'
 import { initialUser } from './types'
@@ -42,6 +43,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
  */
 export const useUser = (user?: User): [User, (user: User) => void] => {
   const [hasMounted, setHasMounted] = useState(false)
+  const [cookie, setCookie] = useCookies(['user'])
   // prevent hydration error
   useEffect(() => {
     setHasMounted(true)
@@ -57,6 +59,7 @@ export const useUser = (user?: User): [User, (user: User) => void] => {
   )
 
   const setUser = (user: User) => {
+    setCookie('user', user.email, { path: '/', maxAge: 86400 })
     setEmail(user.email)
     setFirstName(user.firstName)
     setLastName(user.lastName)

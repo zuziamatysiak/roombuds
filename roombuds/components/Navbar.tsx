@@ -9,9 +9,11 @@ import {
 import { useUser } from '../utils/auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useCookies } from 'react-cookie'
 
 export const Navbar = () => {
   const [user] = useUser()
+  const [cookies, setCookie, removeCookie] = useCookies(['user'])
 
   const router = useRouter()
 
@@ -26,7 +28,7 @@ export const Navbar = () => {
             </Link>
           </div>
         </Typography>
-        {!user.email ? (
+        {!user.email || router.pathname === '/' ? (
           <Button
             style={{
               backgroundColor: '#459b55',
@@ -87,6 +89,7 @@ export const Navbar = () => {
               }}
               variant="contained"
               onClick={() => {
+                removeCookie('user', { path: '/' })
                 localStorage.clear()
                 router.push('/')
               }}
