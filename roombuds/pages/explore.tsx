@@ -1,4 +1,4 @@
-import { Box, Card, Grid, Typography, Button } from '@material-ui/core'
+import { Box, Card, Grid, Typography, Button, TextField } from '@material-ui/core'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import { mergeStyles } from 'react-select'
@@ -56,6 +56,12 @@ const ExplorePage = () => {
           Explore your potential roommates
         </span>
       </Typography>
+      <TextField id="filled-basic" label="Search by company:" variant="filled" 
+                style = {{          
+                    marginTop: '1rem',
+                    marginLeft: '2rem',
+                    width: "700px"}}/>
+      <Button variant="contained" style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}>Search</Button>
       <Grid
         container
         spacing={7}
