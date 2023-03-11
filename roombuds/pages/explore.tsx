@@ -22,6 +22,8 @@ TODO:
 - fix image sizing
 */
 const ExplorePage = () => {
+  const [companyInput, setCompanyInput] = useState('')
+//   const [companyInfo, setCompanyInfo] = useState('')
   const [user, setUser] = useUser()
   const myLoader = ({ src, width, quality }) => {
     return src + '/${src}?w=${width}&q=${quality || 75}'
@@ -29,6 +31,7 @@ const ExplorePage = () => {
 
   // TODO: add error checking
   const [peopleList, setPeopleList] = useState([])
+  const [originalList, setOrginalList] = useState([])
   useEffect(() => {
     async function getPeople() {
       try {
@@ -38,12 +41,27 @@ const ExplorePage = () => {
           USER_PROFILE_PICTURES
         )
         setPeopleList(people)
+        setOrginalList(people)
       } catch (e) {
         console.error(e)
       }
     }
     getPeople()
   }, [])
+
+  async function handleSubmit() {
+    var newPplList = []
+    originalList.forEach(function(p) {
+       if (p.company == companyInput) {
+        newPplList.push(p)
+       }
+    })
+    if (newPplList.length >= 1) {
+        setPeopleList(newPplList)
+    } else {
+        setPeopleList(originalList)
+    }
+  }
 
   return (
     <>
@@ -57,11 +75,17 @@ const ExplorePage = () => {
         </span>
       </Typography>
       <TextField id="filled-basic" label="Search by company:" variant="filled" 
+                onChange={(e) => {
+                    setCompanyInput(e.target.value)
+                }}
                 style = {{          
                     marginTop: '1rem',
                     marginLeft: '2rem',
                     width: "700px"}}/>
-      <Button variant="contained" style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}>Search</Button>
+      <Button variant="contained" 
+              style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}
+              onClick={handleSubmit}>
+                Search</Button>
       <Grid
         container
         spacing={7}
