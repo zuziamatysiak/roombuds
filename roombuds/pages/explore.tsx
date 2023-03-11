@@ -22,8 +22,9 @@ TODO:
 - fix image sizing
 */
 const ExplorePage = () => {
+  // NOTE: only added company and school search as the rest should be based on the matching algorithm 
   const [companyInput, setCompanyInput] = useState('')
-//   const [companyInfo, setCompanyInfo] = useState('')
+  const [collegeInput, setCollegeInput] = useState('')
   const [user, setUser] = useUser()
   const myLoader = ({ src, width, quality }) => {
     return src + '/${src}?w=${width}&q=${quality || 75}'
@@ -49,10 +50,24 @@ const ExplorePage = () => {
     getPeople()
   }, [])
 
-  async function handleSubmit() {
+  async function handleSubmitCompany() {
     var newPplList = []
     originalList.forEach(function(p) {
        if (p.company == companyInput) {
+        newPplList.push(p)
+       }
+    })
+    if (newPplList.length >= 1) {
+        setPeopleList(newPplList)
+    } else {
+        setPeopleList(originalList)
+    }
+  }
+
+  async function handleSubmitCollege() {
+    var newPplList = []
+    originalList.forEach(function(p) {
+       if (p.college == collegeInput) {
         newPplList.push(p)
        }
     })
@@ -84,7 +99,19 @@ const ExplorePage = () => {
                     width: "700px"}}/>
       <Button variant="contained" 
               style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}
-              onClick={handleSubmit}>
+              onClick={handleSubmitCompany}>
+                Search</Button>
+        <TextField id="filled-basic" label="Search by college:" variant="filled" 
+                onChange={(e) => {
+                    setCollegeInput(e.target.value)
+                }}
+                style = {{          
+                    marginTop: '1rem',
+                    marginLeft: '2rem',
+                    width: "700px"}}/>
+      <Button variant="contained" 
+              style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}
+              onClick={handleSubmitCollege}>
                 Search</Button>
       <Grid
         container
