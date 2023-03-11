@@ -86,6 +86,19 @@ export const Navbar = () => {
               style={{
                 backgroundColor: '#459b55',
                 color: 'white',
+                marginRight: '1em',
+              }}
+              variant="contained"
+              onClick={() => {
+                router.push('/explore')
+              }}
+            >
+              Matches
+            </Button>
+            <Button
+              style={{
+                backgroundColor: '#459b55',
+                color: 'white',
               }}
               variant="contained"
               onClick={() => {
