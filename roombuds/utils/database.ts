@@ -42,12 +42,14 @@ export const put = async (data: any, table: string): Promise<PutResponse> => {
  * @param keyName key name of lookup (e.g. "email")
  * @param keyVal key value of lookup (e.g. "test@test.com")
  * @param table table name (e.g. Users)
+ * @param attribute? attribute name of lookup (e.g. "firstName")
  * @returns GetResponse {success: boolean, data: any, errorMessage?: string}
  */
 export const get = async (
   keyName: string,
   keyVal: any,
-  table: string
+  table: string,
+  attribute?: string
 ): Promise<GetResponse> => {
   var params = {
     TableName: table,
@@ -55,10 +57,16 @@ export const get = async (
       [keyName]: keyVal,
     },
   }
-
+  if (typeof attribute !== 'undefined') {
+    params = { ...params, ... { ProjectionExpression: attribute } }
+  }
   try {
     const resp = await docClient.get(params).promise()
-    return { success: true, data: resp.Item }
+    var data = resp.Item
+    if (typeof attribute !== 'undefined') {
+      data = data[attribute]
+    }
+    return { success: true, data: data }
   } catch (err) {
     console.log('users::read::error - ' + JSON.stringify(err, null, 2))
     return {

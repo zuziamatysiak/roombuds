@@ -12,19 +12,19 @@ import Card from '@mui/material/Card';
 import { CardActionArea } from '@mui/material';
 
 import { useRouter } from 'next/router'
-import { useCallback, useState, useEffect } from 'react'
-import { FormSelectReact } from '../components/FormSelectReact'
+import { useCallback, useState } from 'react'
 import { FormTextField } from '../components/Form'
 import { Navbar } from '../components/Navbar'
 import { useUser } from '../utils/auth'
 import { put, get, update } from '../utils/database'
-import { USER_TABLE, VERIFICATION_CODE_TABLE } from '../utils/constants'
+import { USER_PREFERENCES_TABLE, USER_TABLE, VERIFICATION_CODE_TABLE } from '../utils/constants'
 import { sendVerificationEmail } from '../utils/verification'
 import { GetResponse } from '../utils/types'
 
 const initialState = {
-  isCollege: '',
+  orgType: '',
   org: '',
+  orgDomains: [''],
   emailToVerify: ''
 }
 
@@ -33,11 +33,8 @@ function generateCode() {
   return Math.random().toString(36).substring(2, 8)
 }
 
-const verifyCode = async (
-  email: string,
-  code: string
-): Promise<GetResponse> => {
-  const codeInfo = await get('email', email, VERIFICATION_CODE_TABLE)
+async function verifyCode(email: string, code: string): Promise<GetResponse> {
+  const codeInfo = await get('email', email, VERIFICATION_CODE_TABLE, 'code')
   if (!codeInfo.success) {
     return { success: false, errorMessage: codeInfo.errorMessage }
   } else {
@@ -46,7 +43,7 @@ const verifyCode = async (
         success: false,
         errorMessage: 'Verification code expired or not sent',
       }
-    } else if (code == codeInfo.data.code) {
+    } else if (code == codeInfo.data) {
       return { success: true }
     } else {
       return { success: false, errorMessage: 'Wrong verification code' }
@@ -54,52 +51,61 @@ const verifyCode = async (
   }
 }
 
-export default function VerifyPage() {
-  const [collegeMap, setCollegeMap] = useState<any>(new Map<string, string>())
-  const [collegeList, setCollegeList] = useState([])
-  useEffect(() => {
-    try {
-      fetch('http://universities.hipolabs.com/search?country=United%20States')
-        .then((response) => response.json())
-        .then((collegeData) => {
-          var collegeDataDomains = new Map<string, string>(
-            collegeData.map(function (item: any, _: any) {
-              return [item['name'], item['domains']]
-            })
-          )
-          setCollegeMap(collegeDataDomains)
-          var collegeDataNames = collegeData.map(function (
-            item: any,
-            index: any
-          ) {
-            return { value: index, label: item['name'] }
-          })
-          setCollegeList(collegeDataNames)
-        })
-    } catch (error) {
-      console.log('Unable to connect to universities API.')
-      setCollegeMap(new Map<string, string>())
-      setCollegeList([])
+async function verifyEmail(email: string, org: string, orgType: string)
+  : Promise<GetResponse> {
+  // ensure fields are not empty
+  if (email.length == 0 || org.length == 0) {
+    return { success: false, errorMessage: 'Please choose enter your organization and email to verify.' }
+  }
+  // verify that domain is correct
+  const split = email.split('@')
+  if (split.length != 2) {
+    return {
+      success: false, errorMessage: `Username or domain missing from email address. 
+    Please enter a valid email address for ${org}.`
     }
-  }, [])
+  }
+  let domains = []
+  if (orgType === 'college') {
+    domains = await getCollegeDomains(org)
+  } else {
+    // TODO: get company domains
+  }
+  if (!domains.includes(split[1])) {
+    return { success: false, errorMessage: `Please enter a valid email address for ${org}.` }
+  }
+  return { success: true }
+}
 
-  // TODO: Populate
-  const companyMap = new Map<string, string>()
-  companyMap.set("Company 1", "company1.com")
-  companyMap.set("Company 2", "company2.com")
-  const companyList = [{ value: 0, label: "Company 1" }, { value: 1, label: "Company 2" }]
+async function getUserOrg(email: string, orgType: string): Promise<string> {
+  const org = await get('email', email, USER_PREFERENCES_TABLE, orgType)
+  if (!org.success || org.data == null) {
+    return ""
+  }
+  return org.data
+}
 
-  const [user, setUser] = useUser()
+async function getCollegeDomains(college: string): Promise<any[]> {
+
+  try {
+    return await fetch(`http://universities.hipolabs.com/search?country=United%20States&name=${encodeURI(college)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        return data[0]['domains']
+      })
+  } catch (error) {
+    console.log(`Unable to get domains for college ${college}: ${error}`)
+    return []
+  }
+}
+
+export default function VerifyPage() {
   const router = useRouter()
 
+  const [user, setUser] = useUser()
   const [state, setState] = useState(initialState)
   const [step, setStep] = useState<number>(1);
   const [codeInput, setCodeInput] = useState('')
-  const [selectedOrg, setSelectedOrg] = useState()
-  function handleOrg(data: any) {
-    setSelectedOrg(data)
-    state.org = data.label
-  }
 
   const updateState = useCallback((newState: any) => {
     setState((currentState) => ({ ...currentState, ...newState }))
@@ -117,32 +123,20 @@ export default function VerifyPage() {
     if (step == 1) {
       // user has chosen either college/work to verify
       // ensure they have chosen one
-      if (state.isCollege == null) {
+      if (state.orgType === '') {
         alert('Please choose either college or work email to verify.')
+        return
+      }
+      state.org = await getUserOrg(user.email, state.orgType)
+      if (state.org === '') {
+        alert('You do not have a college/company set. Please set it in your profile before verifying.')
         return
       }
     }
     if (step == 2) {
-      // user has searched for college/work and inputted their email. 
-      // ensure fields are not empty
-      if (state.emailToVerify.length == 0 || state.org.length == 0) {
-        alert('Please choose enter your organization and email to verify.')
-        return
-      }
-      // verify that domain is correct
-      const split = state.emailToVerify.split('@')
-      if (split.length != 2) {
-        alert('Please enter a valid email address for ' + state.org)
-        return
-      }
-      var domainsMap = new Map<string, string>()
-      if (state.isCollege) {
-        domainsMap = collegeMap
-      } else {
-        domainsMap = companyMap
-      }
-      if (!domainsMap.get(state.org)?.includes(split[1])) {
-        alert('Please enter a valid email address for ' + state.org)
+      const emailFormatResp = await verifyEmail(state.emailToVerify, state.org, state.orgType)
+      if (!emailFormatResp.success) {
+        alert(emailFormatResp.errorMessage)
         return
       }
       // TODO: add expiration time
@@ -198,11 +192,11 @@ export default function VerifyPage() {
           <Card
             onClick={() => setState({
               ...state, ...{
-                isCollege: state.isCollege === '' ? 'true' : state.isCollege === 'false' ? 'true' : 'true'
+                orgType: 'college'
               }
             })}
             style={{
-              backgroundColor: state.isCollege === '' || state.isCollege == 'false' ? 'white' : '#c7ffd1'
+              backgroundColor: state.orgType === '' || state.orgType !== 'college' ? 'white' : '#c7ffd1'
             }}
           >
             <CardActionArea>
@@ -216,11 +210,11 @@ export default function VerifyPage() {
           <Card
             onClick={() => setState({
               ...state, ...{
-                isCollege: state.isCollege === '' ? 'true' : state.isCollege === 'false' ? 'false' : 'false'
+                orgType: 'company'
               }
             })}
             style={{
-              backgroundColor: state.isCollege === 'false' ? '#c7ffd1' : 'white'
+              backgroundColor: state.orgType === '' || state.orgType !== 'company' ? 'white' : '#c7ffd1'
             }}
           >
             <CardActionArea>
@@ -236,41 +230,18 @@ export default function VerifyPage() {
 
   const step2 = (
     <Container component="main" maxWidth="xs">
-      {state.isCollege === 'true' ?
-        <div>
-          <FormSelectReact
-            options={collegeList}
-            label="Where did you go to college?"
-            value={selectedOrg}
-            updateState={handleOrg}
-            placeholder={'Search for your college...'}
-            isMulti={false}
-          />
-          <FormTextField
-            id="emailToVerify"
-            label="College email"
-            value={state.emailToVerify}
-            updateState={updateState}
-          />
-        </div>
-        :
-        <div>
-          <FormSelectReact
-            options={companyList}
-            label="Where do you work?"
-            value={selectedOrg}
-            updateState={handleOrg}
-            placeholder={'Search for your company...'}
-            isMulti={false}
-          />
-          <FormTextField
-            id="emailToVerify"
-            label="Corporate email"
-            value={state.emailToVerify}
-            updateState={updateState}
-          />
-        </div>
-      }
+      <Typography
+        variant="h6"
+        style={{ marginBottom: 20, textAlign: 'center' }}
+      >
+        Enter your email for <br></br>{state.org}
+      </Typography>
+      <FormTextField
+        id="emailToVerify"
+        label="email"
+        value={state.emailToVerify}
+        updateState={updateState}
+      />
     </Container>
   )
 
@@ -299,20 +270,23 @@ export default function VerifyPage() {
 
   const nextPrevButtons = (
     <div style={{ display: 'flex' }}>
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        onClick={handlePrev}
-        style={{
-          marginTop: '3em',
-          marginRight: '1em',
-          backgroundColor: '#459b55',
-          color: 'white',
-        }}
-      >
-        Previous
-      </Button>
+      {step > 1 ?
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          onClick={handlePrev}
+          style={{
+            marginTop: '3em',
+            marginRight: '1em',
+            backgroundColor: '#459b55',
+            color: 'white',
+          }}
+        >
+          Previous
+        </Button>
+        : <></>
+      }
       <Button
         type="submit"
         fullWidth
