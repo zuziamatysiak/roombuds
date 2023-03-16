@@ -10,7 +10,11 @@ import {
   Grid,
 } from '@material-ui/core'
 import { FormTextField } from '../components/Form'
-import { USER_TABLE, RANDOM_PATH, USER_PROFILE_PICTURES } from '../utils/constants'
+import {
+  USER_TABLE,
+  RANDOM_PATH,
+  USER_PROFILE_PICTURES,
+} from '../utils/constants'
 import { useRouter } from 'next/router'
 import { useUser } from '../utils/auth'
 
@@ -48,7 +52,7 @@ export default function SignupPage() {
     //  TODO: show error message if signup is unsuccessful
 
     // TODO: add error message if unsuccesfully saved random pic
-    const pic = { email: state.email, RANDOM_PATH }
+    const pic = { email: state.email, profilePicPath: RANDOM_PATH }
     put(pic, USER_PROFILE_PICTURES)
   }
 

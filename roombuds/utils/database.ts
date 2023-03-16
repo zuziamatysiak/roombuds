@@ -1,4 +1,3 @@
-import { isTemplateSpan } from 'typescript'
 import { accessKeyId, secretAccessKey } from './secrets'
 import { GetResponse, PutResponse } from './types'
 
@@ -6,13 +5,11 @@ var AWS = require('aws-sdk')
 let awsConfig = {
   region: 'us-east-1',
   endpoint: 'http://dynamodb.us-east-1.amazonaws.com',
-  // TODO: remember to input before running the application :)
   accessKeyId: accessKeyId,
   secretAccessKey: secretAccessKey,
 }
-AWS.config.update(awsConfig)
 
-let docClient = new AWS.DynamoDB.DocumentClient()
+let docClient = new AWS.DynamoDB.DocumentClient(awsConfig)
 
 /**
  *
@@ -86,17 +83,16 @@ export const update = async (
   keyVal: any,
   table: string
 ): Promise<PutResponse> => {
-
-  let updateExpression = 'set';
-  let ExpressionAttributeNames: Record<string, string> = {};
-  let ExpressionAttributeValues: Record<string, any> = {};
+  let updateExpression = 'set'
+  let ExpressionAttributeNames: Record<string, string> = {}
+  let ExpressionAttributeValues: Record<string, any> = {}
   for (const property in data) {
     updateExpression += ` #${property} = :${property} ,`
     ExpressionAttributeNames['#' + property] = property
     ExpressionAttributeValues[':' + property] = data[property]
   }
 
-  updateExpression = updateExpression.slice(0, -1);
+  updateExpression = updateExpression.slice(0, -1)
   let params = {
     TableName: table,
     Key: {
@@ -122,22 +118,26 @@ export const update = async (
 
 export const scanTable = async (table: string) => {
   const params = {
-      TableName: table,
-  };
+    TableName: table,
+  }
 
-  const scanResults = [];
-  var items;
+  const scanResults = []
+  var items
   do {
-      items =  await docClient.scan(params).promise();
-      items.Items.forEach((item) => scanResults.push(item));
-      params.ExclusiveStartKey  = items.LastEvaluatedKey;
-  } while(typeof items.LastEvaluatedKey !== "undefined");
+    items = await docClient.scan(params).promise()
+    items.Items.forEach((item) => scanResults.push(item))
+    params.ExclusiveStartKey = items.LastEvaluatedKey
+  } while (typeof items.LastEvaluatedKey !== 'undefined')
 
-  return scanResults;
-};
+  return scanResults
+}
 
 // TODO: generalize
-export const mergeTables = async (table1: string, table2 : string, table3: string) => {
+export const mergeTables = async (
+  table1: string,
+  table2: string,
+  table3: string
+) => {
   const res1 = await scanTable(table1)
   const res2 = await scanTable(table2)
   const res3 = await scanTable(table3)
@@ -147,22 +147,22 @@ export const mergeTables = async (table1: string, table2 : string, table3: strin
   // TODO: add error checls
   for (var i = 0; i < res1.length; i++) {
     var curr = res1[i]
-    for (var j = 0; j <res2.length; j++) {
+    for (var j = 0; j < res2.length; j++) {
       if (curr.email == res2[j].email) {
         curr.firstName = res2[j].firstName
       }
     }
 
-    for (var j = 0; j <res3.length; j++) {
+    for (var j = 0; j < res3.length; j++) {
       if (curr.email == res3[j].email) {
-        curr.tempPath = res3[j].tempPath
+        curr.profilePicPath = res3[j].profilePicPath
       }
     }
 
     scanResults.push(curr)
   }
 
-  console.log("banana")
+  console.log('banana')
   console.log(scanResults)
-  return scanResults;
-};
+  return scanResults
+}

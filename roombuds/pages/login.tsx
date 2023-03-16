@@ -45,11 +45,6 @@ export default function LoginPage() {
   const [user, setUser] = useUser()
   const router = useRouter()
 
-  // TODO: redirect to profile if user is already logged in
-  // if (user) {
-  //   router.push('/profile')
-  // }
-
   const [emailInput, setEmailInput] = useState('')
   const [passwordInput, setPassInput] = useState('')
 

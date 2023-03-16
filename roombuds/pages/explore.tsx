@@ -89,30 +89,56 @@ const ExplorePage = () => {
           Explore your potential roommates
         </span>
       </Typography>
-      <TextField id="filled-basic" label="Search by company:" variant="filled" 
-                onChange={(e) => {
-                    setCompanyInput(e.target.value)
-                }}
-                style = {{          
-                    marginTop: '1rem',
-                    marginLeft: '2rem',
-                    width: "700px"}}/>
-      <Button variant="contained" 
-              style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}
-              onClick={handleSubmitCompany}>
-                Search</Button>
-        <TextField id="filled-basic" label="Search by college:" variant="filled" 
-                onChange={(e) => {
-                    setCollegeInput(e.target.value)
-                }}
-                style = {{          
-                    marginTop: '1rem',
-                    marginLeft: '2rem',
-                    width: "700px"}}/>
-      <Button variant="contained" 
-              style = {{marginTop: '1.5rem', marginLeft: '1rem', backgroundColor: '#459b55', color: 'white'}}
-              onClick={handleSubmitCollege}>
-                Search</Button>
+      <TextField
+        id="filled-basic"
+        label="Search by company:"
+        variant="filled"
+        onChange={(e) => {
+          setCompanyInput(e.target.value)
+        }}
+        style={{
+          marginTop: '1rem',
+          marginLeft: '2rem',
+          width: '700px',
+        }}
+      />
+      <Button
+        variant="contained"
+        style={{
+          marginTop: '1.5rem',
+          marginLeft: '1rem',
+          backgroundColor: '#459b55',
+          color: 'white',
+        }}
+        onClick={handleSubmitCompany}
+      >
+        Search
+      </Button>
+      <TextField
+        id="filled-basic"
+        label="Search by college:"
+        variant="filled"
+        onChange={(e) => {
+          setCollegeInput(e.target.value)
+        }}
+        style={{
+          marginTop: '1rem',
+          marginLeft: '2rem',
+          width: '700px',
+        }}
+      />
+      <Button
+        variant="contained"
+        style={{
+          marginTop: '1.5rem',
+          marginLeft: '1rem',
+          backgroundColor: '#459b55',
+          color: 'white',
+        }}
+        onClick={handleSubmitCollege}
+      >
+        Search
+      </Button>
       <Grid
         container
         spacing={7}
@@ -125,13 +151,12 @@ const ExplorePage = () => {
       >
         {Array.from(Array(peopleList.length)).map((_, index) => (
           <Grid item xs={2} sm={4} md={4} lg={4} key={index}>
-            <Card style={{ width: '90%' }}>
+            <Card style={{ width: '100%' }}>
               <Grid container>
-                {peopleList[index].tempPath !== undefined ? (
+                {peopleList[index].profilePicPath !== undefined ? (
                   <Image
                     // TODO: improve UI
-                    loader={myLoader}
-                    src={peopleList[index].tempPath}
+                    src={peopleList[index].profilePicPath}
                     alt="profile_picture"
                     width={200}
                     height={200}
@@ -140,7 +165,6 @@ const ExplorePage = () => {
                 ) : (
                   <Image
                     // TODO: improve UI
-                    loader={myLoader}
                     src={RANDOM_PATH}
                     alt="profile_picture"
                     width={200}
@@ -148,7 +172,12 @@ const ExplorePage = () => {
                     style={{ alignContent: 'center' }}
                   />
                 )}
-                <div style={{ marginLeft: '3rem', marginTop: '2rem' }}>
+                <div
+                  style={{
+                    marginLeft: '3rem',
+                    marginTop: '2rem',
+                  }}
+                >
                   <Typography>
                     {peopleList[index].firstName !== undefined ? (
                       <span style={{ fontWeight: 600 }}>
@@ -176,7 +205,12 @@ const ExplorePage = () => {
                     </span>
                   </Typography>
                   <Typography>
-                    <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                    <span
+                      style={{
+                        fontWeight: 600,
+                        fontSize: '12px',
+                      }}
+                    >
                       {peopleList[index].college}
                     </span>
                   </Typography>

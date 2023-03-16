@@ -1,30 +1,29 @@
-import { Box, Card, Grid, Typography, Button } from '@material-ui/core'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { Box, Button, Card, Grid, Typography } from '@material-ui/core'
 import { useEffect, useState } from 'react'
 import { Navbar } from '../components/Navbar'
+import { Avatar } from '../components/profile/Avatar'
+import { EditProfileModal } from '../components/profile/EditProfile'
 import { Subtitle } from '../components/Text'
 import { useUser } from '../utils/auth'
+import { COLORS } from '../utils/colors'
 import {
   USER_PREFERENCES_TABLE,
   USER_PROFILE_PICTURES,
-  RANDOM_PATH,
 } from '../utils/constants'
-import { get, put } from '../utils/database'
+import { get } from '../utils/database'
 
 const ProfilePage = () => {
   const [user] = useUser()
 
   const [userPrefs, setUserPrefs] = useState<any>({})
+  const [editMode, setEditMode] = useState(false)
   // TODO: maybe as a stretch at the start everyone could get a random plant picture
-  const randomPicPath = RANDOM_PATH
-  const [filePath, setFilePath] = useState(randomPicPath)
-  const [tempPath, setTempPath] = useState(randomPicPath)
+  const [profilePicPath, setProfilePicPath] = useState('')
 
   useEffect(() => {
     async function fetchPrefs() {
       try {
-        const response = await get('email', user?.email, USER_PREFERENCES_TABLE)
+        const response = await get('email', user.email, USER_PREFERENCES_TABLE)
         if (response.success) {
           setUserPrefs(response.data)
         }
@@ -34,75 +33,67 @@ const ProfilePage = () => {
     }
     async function fetchProfilePic() {
       try {
-        const response = await get('email', user?.email, USER_PROFILE_PICTURES)
+        const response = await get('email', user.email, USER_PROFILE_PICTURES)
         if (response.success) {
-          setFilePath(response.data.tempPath)
+          setProfilePicPath(response.data.profilePicPath)
         } else {
-          setFilePath(RANDOM_PATH)
+          console.log('no profile pic found', response)
         }
       } catch (e) {
         console.error(e)
-        setFilePath(RANDOM_PATH)
       }
     }
-    fetchPrefs()
-    fetchProfilePic()
-  }, [user?.email])
-
-  // TODO: add picture cropping instead of squashing
-  const myLoader = ({ src, width, quality }) => {
-    console.log(filePath)
-    if (filePath == undefined) setFilePath(RANDOM_PATH)
-    // TODO: Add check if someone added a valid URL
-    return filePath + '/${src}?w=${width}&q=${quality || 75}'
-  }
-
-  // TODO: later change it to save a file as opposed to saving a link
-  function onFileChange(data: any) {
-    setTempPath(data.target.value)
-  }
-
-  function onFileSubmit(data: any) {
-    setFilePath(tempPath)
-    const pic = { email: user?.email, tempPath }
-    put(pic, USER_PROFILE_PICTURES)
-  }
+    if (user.email) {
+      fetchPrefs()
+      fetchProfilePic()
+    }
+  }, [user.email])
 
   return (
     <>
       <Navbar />
-      <Box style={{ padding: '1rem 3rem', maxWidth: '75%', margin: 'auto' }}>
-        <Typography variant="h4" style={{ margin: '1rem' }}>
-          👋 Welcome {user?.firstName} {user?.lastName}{' '}
-          {user?.verified ? '✅' : ''}
-        </Typography>
-        <Grid container spacing={1}>
+      <Box style={{ padding: '3rem 3rem', maxWidth: '75%', margin: 'auto' }}>
+        <Grid container>
+          <Grid item xs={12} sm={12} md={4} lg={3}>
+            <Avatar
+              src={profilePicPath}
+              alt="profile_picture"
+              width={200}
+              height={200}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={9}>
+            <Box
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                height: '100%',
+                position: 'relative',
+              }}
+            >
+              <Button
+                variant="outlined"
+                style={{ position: 'absolute', top: 0, right: 0 }}
+                onClick={() => setEditMode(!editMode)}
+              >
+                Edit
+              </Button>
+              {profilePicPath && (
+                <EditProfileModal
+                  open={editMode}
+                  setOpen={setEditMode}
+                  userPrefs={{ ...userPrefs, ...{ profilePicPath } }}
+                />
+              )}
+              <Typography variant="h4">
+                {user?.firstName} {user?.lastName} {user?.verified ? '✅' : ''}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid container spacing={1} style={{ paddingTop: '3rem' }}>
           <Grid item xs={12} sm={6} md={6}>
             <Card variant="outlined" style={{ padding: '2rem' }}>
-              <Image
-                // TODO: improve UI
-                loader={myLoader}
-                src="profile.png"
-                alt="profile_picture"
-                width={200}
-                height={200}
-                style={{ alignContent: 'center' }}
-              />
-              <Typography style={{ fontSize: 12 }}>
-                Change your profile picture by providing a link to your pic.
-              </Typography>
-              <input type="form" onChange={onFileChange} />
-              <Button
-                variant="contained"
-                onClick={onFileSubmit}
-                style={{
-                  margin: '0.5rem',
-                  maxHeight: '20px',
-                  minHeight: '20px',
-                }}
-              >
-                Change picture
-              </Button>
               <Typography>
                 Looking for roommates in{' '}
                 <span style={{ fontWeight: 600 }}>
