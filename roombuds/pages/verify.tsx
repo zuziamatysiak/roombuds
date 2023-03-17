@@ -200,7 +200,7 @@ export default function VerifyPage() {
             }}
           >
             <CardActionArea>
-              <CardContent>
+              <CardContent style={{ textAlign: 'center' }}>
                 <h1>College</h1>
               </CardContent>
             </CardActionArea>
@@ -218,7 +218,7 @@ export default function VerifyPage() {
             }}
           >
             <CardActionArea>
-              <CardContent>
+              <CardContent style={{ textAlign: 'center' }}>
                 <h1>Work</h1>
               </CardContent>
             </CardActionArea>

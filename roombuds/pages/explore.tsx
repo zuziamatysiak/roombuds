@@ -52,29 +52,29 @@ const ExplorePage = () => {
 
   async function handleSubmitCompany() {
     var newPplList = []
-    originalList.forEach(function(p) {
-       if (p.company == companyInput) {
+    originalList.forEach(function (p) {
+      if (p.company == companyInput) {
         newPplList.push(p)
-       }
+      }
     })
     if (newPplList.length >= 1) {
-        setPeopleList(newPplList)
+      setPeopleList(newPplList)
     } else {
-        setPeopleList(originalList)
+      setPeopleList(originalList)
     }
   }
 
   async function handleSubmitCollege() {
     var newPplList = []
-    originalList.forEach(function(p) {
-       if (p.college == collegeInput) {
+    originalList.forEach(function (p) {
+      if (p.college == collegeInput) {
         newPplList.push(p)
-       }
+      }
     })
     if (newPplList.length >= 1) {
-        setPeopleList(newPplList)
+      setPeopleList(newPplList)
     } else {
-        setPeopleList(originalList)
+      setPeopleList(originalList)
     }
   }
 

@@ -57,13 +57,13 @@ export const get = async (
       [keyName]: keyVal,
     },
   }
-  if (typeof attribute !== 'undefined') {
+  if (attribute !== undefined) {
     params = { ...params, ... { ProjectionExpression: attribute } }
   }
   try {
     const resp = await docClient.get(params).promise()
     var data = resp.Item
-    if (typeof attribute !== 'undefined') {
+    if (attribute !== undefined) {
       data = data[attribute]
     }
     return { success: true, data: data }

@@ -97,16 +97,16 @@ const ProfilePage = () => {
               <Typography>
                 Looking for roommates in{' '}
                 <span style={{ fontWeight: 600 }}>
-                  {userPrefs.loc_city}, {userPrefs.loc_state}
+                  {userPrefs?.loc_city}, {userPrefs?.loc_state}
                 </span>
               </Typography>
               <Typography>
                 Works at{' '}
-                <span style={{ fontWeight: 600 }}>{userPrefs.company}</span>
+                <span style={{ fontWeight: 600 }}>{userPrefs?.company}</span>
               </Typography>
               <Typography>
                 Goes to{' '}
-                <span style={{ fontWeight: 600 }}>{userPrefs.college}</span>
+                <span style={{ fontWeight: 600 }}>{userPrefs?.college}</span>
               </Typography>
             </Card>
           </Grid>
@@ -120,43 +120,37 @@ const ProfilePage = () => {
                   <Subtitle text="BUDGET:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.budget}</p>
+                  <p>{userPrefs?.budget}</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Subtitle text="WAKE UP TIME:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.wakeuptime}</p>
+                  <p>{userPrefs?.wakeuptime}</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Subtitle text="BED TIME:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.bedtime}</p>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <Subtitle text="TAKES OUT TRASH:" />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.trash}</p>
+                  <p>{userPrefs?.bedtime}</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Subtitle text="HOBBIES:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.hobbies}</p>
+                  <p>{userPrefs?.hobbies}</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Subtitle text="SMOKES CIGARETTE:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.cigarettes}</p>
+                  <p>{userPrefs?.cigarettes}</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Subtitle text="DRINKS ALCOHOL:" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <p>{userPrefs.alcohol}</p>
+                  <p>{userPrefs?.alcohol}</p>
                 </Grid>
               </Grid>
             </Card>

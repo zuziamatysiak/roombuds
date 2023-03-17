@@ -43,22 +43,28 @@ export const FormSelect = ({
   items,
   value,
   updateState,
+  labelShrink = true,
+  labelStyle = {},
+  selectStyle = { marginBottom: '1rem' }
 }: {
   id: string
   label: string
   items: Array<any>
   value: String
   updateState: (newState: Object) => void
+  labelShrink?: boolean
+  labelStyle?: {}
+  selectStyle?: {}
 }) => {
   return (
     <FormControl fullWidth>
-      <InputLabel id={id}>{label}</InputLabel>
+      <InputLabel id={id} shrink={labelShrink} style={labelStyle}>{label}</InputLabel>
       <Select
         labelId={id}
         id={`${id}-select`}
         value={value}
         onChange={(e) => updateState({ [id]: e.target.value })}
-        style={{ marginBottom: '1rem' }}
+        style={selectStyle}
       >
         {items.map((item) =>
           item.value && item.label ? (

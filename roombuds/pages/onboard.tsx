@@ -28,9 +28,10 @@ const initialState = {
   alcohol: '',
   wakeuptime: '',
   bedtime: '',
-  trash: '',
   hobbies: '',
   hobb: [''],
+  instagram: '',
+  reference_willingness: ''
 }
 
 export default function OnboardPage() {
@@ -164,8 +165,8 @@ export default function OnboardPage() {
     } else {
       alert(
         'You are missing ' +
-          missing +
-          '. Please fill out that field and then come back'
+        missing +
+        '. Please fill out that field and then come back'
       )
     }
   }
@@ -266,19 +267,6 @@ export default function OnboardPage() {
             onChange={handleBedDateChange}
           />
         </MuiPickersUtilsProvider>
-        <FormSelect
-          id="trash"
-          label="How often do you throw out the trash?"
-          value={state.trash}
-          items={[
-            'Never',
-            'Once or twice a month',
-            'Several times a week',
-            'Once a week',
-            'Everyday',
-          ]}
-          updateState={updateState}
-        />
         <FormSelectReact
           options={hobbiesList}
           label="What are your hobbies?"
@@ -286,6 +274,20 @@ export default function OnboardPage() {
           updateState={handleHobbies}
           placeholder={'Pick up to 3...'}
           isMulti={true}
+        />
+        <FormTextField
+          id="instagram"
+          label="What is your Instagram handle?"
+          value={state.instagram}
+          updateState={updateState}
+          required={false}
+        />
+        <FormTextField
+          id="reference_willingness"
+          label="Please provide contact info to a previous roommate."
+          value={state.reference_willingness}
+          updateState={updateState}
+          required={false}
         />
         <Button
           type="submit"
