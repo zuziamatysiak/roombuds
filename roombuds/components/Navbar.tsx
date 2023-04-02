@@ -90,7 +90,7 @@ export const Navbar = () => {
               }}
               variant="contained"
               onClick={() => {
-                router.push('/explore')
+                router.push('/matches')
               }}
             >
               Matches
