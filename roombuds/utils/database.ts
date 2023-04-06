@@ -22,7 +22,6 @@ export const put = async (data: any, table: string): Promise<PutResponse> => {
     TableName: table,
     Item: data,
   }
-  console.log(table)
 
   try {
     await docClient.put(params).promise()
@@ -39,7 +38,7 @@ export const put = async (data: any, table: string): Promise<PutResponse> => {
 
 /**
  *
- * @param keyName key name of lookup (e.g. "email")
+ * @param keyName key name of lookup (e.g. "username")
  * @param keyVal key value of lookup (e.g. "test@test.com")
  * @param table table name (e.g. Users)
  * @param attribute? attribute name of lookup (e.g. "firstName")

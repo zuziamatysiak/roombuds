@@ -9,7 +9,11 @@ import { Avatar } from './Avatar'
 import { deleteS3, hash, uploadS3 } from '../../utils/s3'
 import { useUser } from '../../utils/auth'
 import { update } from '../../utils/database'
-import { S3_BUCKET_URL, USER_PROFILE_PICTURES } from '../../utils/constants'
+import {
+  RANDOM_PATH,
+  S3_BUCKET_URL,
+  USER_PROFILE_PICTURES,
+} from '../../utils/constants'
 
 interface IEditProfileModal {
   open: boolean
@@ -55,16 +59,21 @@ export const EditProfileModal = ({
 
   const handleSave = () => {
     if (profPic) {
-      let oldImgKey = userPrefs.profilePicPath.split('/').pop()
-      deleteS3(oldImgKey)
-        .then()
-        .catch((err) => {
-          console.log(err)
-        })
+      // delete old profile pic from s3 (if not default pic)
+      if (userPrefs.profilePicPath !== RANDOM_PATH) {
+        let oldImgKey = userPrefs.profilePicPath.split('/').pop()
+        deleteS3(oldImgKey)
+          .then()
+          .catch((err) => {
+            console.log(err)
+          })
+      }
       let imgType = profPic.name.split('.')[1]
       // e.g. 1234567890.png
       let imgKey = String(hash(user.email)) + '.' + imgType
-      uploadS3(profPic, imgKey).then()
+      uploadS3(profPic, imgKey)
+        .then()
+        .catch((err) => console.log(err))
 
       // update profile pic URL in db
       update(
@@ -75,7 +84,7 @@ export const EditProfileModal = ({
       )
     }
 
-    location.reload()
+    // location.reload()
   }
 
   return (

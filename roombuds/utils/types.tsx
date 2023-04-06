@@ -1,4 +1,5 @@
 export interface User {
+  username: string
   email: string
   firstName: string
   lastName: string
@@ -7,6 +8,7 @@ export interface User {
 }
 
 export const initialUser: User = {
+  username: '',
   email: '',
   firstName: '',
   lastName: '',

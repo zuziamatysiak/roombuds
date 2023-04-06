@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie'
 import type { User } from './types'
 import { initialUser } from './types'
 
+export const USERNAME_KEY = 'username'
 export const EMAIL_KEY = 'email'
 export const FIRST_NAME_KEY = 'firstName'
 export const LAST_NAME_KEY = 'lastName'
@@ -49,6 +50,7 @@ export const useUser = (user?: User): [User, (user: User) => void] => {
     setHasMounted(true)
   }, [])
 
+  const [username, setUsername] = useLocalStorage<string>(USERNAME_KEY, '')
   const [email, setEmail] = useLocalStorage<string>(EMAIL_KEY, '')
   const [firstName, setFirstName] = useLocalStorage<string>(FIRST_NAME_KEY, '')
   const [lastName, setLastName] = useLocalStorage<string>(LAST_NAME_KEY, '')
@@ -59,7 +61,8 @@ export const useUser = (user?: User): [User, (user: User) => void] => {
   )
 
   const setUser = (user: User) => {
-    setCookie('user', user.email, { path: '/', maxAge: 86400 })
+    setCookie('user', user.username, { path: '/', maxAge: 86400 })
+    setUsername(user.username)
     setEmail(user.email)
     setFirstName(user.firstName)
     setLastName(user.lastName)
@@ -74,9 +77,12 @@ export const useUser = (user?: User): [User, (user: User) => void] => {
   if (user) {
     setUser(user)
     return [user, setUser]
-  } else if (email) {
-    // if user is not passed in, but there is an email in localStorage, return user
-    return [{ email, firstName, lastName, verified, verifiedEmail }, setUser]
+  } else if (username) {
+    // if user is not passed in, but there is an username in localStorage, return user
+    return [
+      { username, email, firstName, lastName, verified, verifiedEmail },
+      setUser,
+    ]
   }
 
   return [user || initialUser, setUser]
