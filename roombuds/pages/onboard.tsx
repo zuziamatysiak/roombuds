@@ -157,7 +157,7 @@ export default function OnboardPage() {
   const handleSubmit = async () => {
     let missing = stateChecker()
     if (missing.length == 0) {
-      const prefs = { email: user?.email, ...state }
+      const prefs = { username: user?.username, ...state }
       const resp = await put(prefs, USER_PREFERENCES_TABLE)
       if (resp.success) {
         router.push('/profile')

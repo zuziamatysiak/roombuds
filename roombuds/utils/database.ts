@@ -155,21 +155,18 @@ export const mergeTables = async (
   for (var i = 0; i < res1.length; i++) {
     var curr = res1[i]
     for (var j = 0; j < res2.length; j++) {
-      if (curr.email == res2[j].email) {
+      if (curr.username == res2[j].username) {
         curr.firstName = res2[j].firstName
       }
     }
 
     for (var j = 0; j < res3.length; j++) {
-      if (curr.email == res3[j].email) {
+      if (curr.username == res3[j].username) {
         curr.profilePicPath = res3[j].profilePicPath
       }
     }
 
     scanResults.push(curr)
   }
-
-  console.log('banana')
-  console.log(scanResults)
   return scanResults
 }

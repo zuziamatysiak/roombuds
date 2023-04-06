@@ -23,7 +23,11 @@ const ProfilePage = () => {
   useEffect(() => {
     async function fetchPrefs() {
       try {
-        const response = await get('email', user.email, USER_PREFERENCES_TABLE)
+        const response = await get(
+          'username',
+          user.username,
+          USER_PREFERENCES_TABLE
+        )
         if (response.success) {
           setUserPrefs(response.data)
         }
@@ -33,7 +37,11 @@ const ProfilePage = () => {
     }
     async function fetchProfilePic() {
       try {
-        const response = await get('email', user.email, USER_PROFILE_PICTURES)
+        const response = await get(
+          'username',
+          user.username,
+          USER_PROFILE_PICTURES
+        )
         if (response.success) {
           setProfilePicPath(response.data.profilePicPath)
         } else {
@@ -43,11 +51,11 @@ const ProfilePage = () => {
         console.error(e)
       }
     }
-    if (user.email) {
+    if (user.username) {
       fetchPrefs()
       fetchProfilePic()
     }
-  }, [user.email])
+  }, [user.username])
 
   return (
     <>
@@ -55,12 +63,14 @@ const ProfilePage = () => {
       <Box style={{ padding: '3rem 3rem', maxWidth: '75%', margin: 'auto' }}>
         <Grid container>
           <Grid item xs={12} sm={12} md={4} lg={3}>
-            <Avatar
-              src={profilePicPath}
-              alt="profile_picture"
-              width={200}
-              height={200}
-            />
+            {profilePicPath && (
+              <Avatar
+                src={profilePicPath}
+                alt="profile_picture"
+                width={200}
+                height={200}
+              />
+            )}
           </Grid>
           <Grid item xs={12} sm={12} md={9}>
             <Box
