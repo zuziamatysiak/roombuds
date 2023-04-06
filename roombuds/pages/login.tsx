@@ -55,7 +55,7 @@ export default function LoginPage() {
         email: resp.data.email,
         verified: resp.data.verified,
       })
-      router.push('/profile')
+      router.push(`/profile/${resp.data.username}`)
     } else {
       setErrorMsg(resp.errorMessage || '')
     }

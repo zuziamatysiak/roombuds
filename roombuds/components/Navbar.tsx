@@ -123,7 +123,7 @@ export const Navbar = () => {
               </div>
               <Divider />
               <MenuItem
-                onClick={() => router.push('/profile')}
+                onClick={() => router.push(`/profile/${user.username}`)}
                 style={{ fontFamily: 'Quicksand' }}
               >
                 <ListItemIcon>

@@ -6,7 +6,7 @@ import { COLORS } from '../../utils/colors'
 import { FormTextField } from '../Form'
 import { Subtitle } from '../Text'
 import { Avatar } from './Avatar'
-import { deleteS3, hash, uploadS3 } from '../../utils/s3'
+import { deleteS3, uploadS3 } from '../../utils/s3'
 import { useUser } from '../../utils/auth'
 import { update } from '../../utils/database'
 import {
@@ -69,8 +69,7 @@ export const EditProfileModal = ({
           })
       }
       let imgType = profPic.name.split('.')[1]
-      // e.g. 1234567890.png
-      let imgKey = String(hash(user.email)) + '.' + imgType
+      let imgKey = user.username + '.' + imgType
       uploadS3(profPic, imgKey)
         .then()
         .catch((err) => console.log(err))
@@ -78,13 +77,13 @@ export const EditProfileModal = ({
       // update profile pic URL in db
       update(
         { profilePicPath: S3_BUCKET_URL + imgKey },
-        'email',
-        user.email,
+        'username',
+        user.username,
         USER_PROFILE_PICTURES
       )
     }
 
-    // location.reload()
+    location.reload()
   }
 
   return (

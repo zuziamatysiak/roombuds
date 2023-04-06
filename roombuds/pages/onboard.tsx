@@ -19,6 +19,8 @@ import DateFnsUtils from '@date-io/date-fns'
 import { hobbiesList } from '../public/hobbies_list'
 
 const initialState = {
+  age: '',
+  gender: '',
   loc_state: '',
   loc_city: '',
   budget: '',
@@ -31,7 +33,7 @@ const initialState = {
   hobbies: '',
   hobb: [''],
   instagram: '',
-  reference_willingness: ''
+  reference_willingness: '',
 }
 
 export default function OnboardPage() {
@@ -160,13 +162,13 @@ export default function OnboardPage() {
       const prefs = { username: user?.username, ...state }
       const resp = await put(prefs, USER_PREFERENCES_TABLE)
       if (resp.success) {
-        router.push('/profile')
+        router.push(`/profile/${user?.username}`)
       }
     } else {
       alert(
         'You are missing ' +
-        missing +
-        '. Please fill out that field and then come back'
+          missing +
+          '. Please fill out that field and then come back'
       )
     }
   }
@@ -190,6 +192,19 @@ export default function OnboardPage() {
           margin: 'auto',
         }}
       >
+        <FormTextField
+          id="age"
+          label="How old are you?"
+          type="number"
+          value={state.age}
+          updateState={updateState}
+        />
+        <FormTextField
+          id="gender"
+          label="What is your gender?"
+          value={state.gender}
+          updateState={updateState}
+        />
         <FormSelectReact
           options={stateList}
           label="Which state are you moving to?"
