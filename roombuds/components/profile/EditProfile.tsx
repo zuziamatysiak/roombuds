@@ -1,19 +1,20 @@
 import { ChangeEvent, useCallback, useState } from 'react'
 
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Button, TextField, Typography } from '@material-ui/core'
 import Modal from '@mui/material/Modal'
 import { COLORS } from '../../utils/colors'
-import { FormTextField } from '../Form'
 import { Subtitle } from '../Text'
 import { Avatar } from './Avatar'
 import { deleteS3, uploadS3 } from '../../utils/s3'
 import { useUser } from '../../utils/auth'
-import { update } from '../../utils/database'
+import { put, update } from '../../utils/database'
 import {
   RANDOM_PATH,
   S3_BUCKET_URL,
+  USER_PREFERENCES_TABLE,
   USER_PROFILE_PICTURES,
 } from '../../utils/constants'
+import { OnboardQuestionnaire } from '../OnboardQuestionnaire'
 
 interface IEditProfileModal {
   open: boolean
@@ -30,6 +31,8 @@ const modalStyle = {
   border: `1px solid ${COLORS.GREEN}`,
   backgroundColor: 'white',
   padding: '2rem',
+  overflowY: 'auto' as 'auto',
+  height: '100vh',
 }
 
 export const EditProfileModal = ({
@@ -82,6 +85,10 @@ export const EditProfileModal = ({
         USER_PROFILE_PICTURES
       )
     }
+    // update table with new preferences
+    put({ username: user.username, ...state }, USER_PREFERENCES_TABLE).catch(
+      (err) => console.log(err)
+    )
 
     location.reload()
   }
@@ -106,12 +113,19 @@ export const EditProfileModal = ({
             onChange={handleImage}
           />
         </Button>
-        <FormTextField
-          id="loc_city"
-          label="Location (City)"
-          value={state.loc_city}
-          updateState={updateState}
+        <Subtitle text="Update Personal Information" />
+        <TextField
+          id={'bio'}
+          label={'Bio'}
+          value={state.bio}
+          fullWidth
+          multiline
+          minRows={4}
+          onChange={(e) => updateState({ ['bio']: e.target.value })}
+          style={{ margin: '1rem 0' }}
+          variant="outlined"
         />
+        <OnboardQuestionnaire state={state} updateState={updateState} />
         <div>
           <Button
             style={{ backgroundColor: COLORS.GREEN, color: 'white' }}
