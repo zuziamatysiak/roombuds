@@ -173,7 +173,7 @@ export default function VerifyPage() {
       }
       const userInfo = { ...user, ... { verified: true } }
       setUser(userInfo)
-      router.push('/profile')
+      router.push(`/profile/${user.username}`)
       return
     }
     setStep(step + 1)

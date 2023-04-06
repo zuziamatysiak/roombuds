@@ -103,29 +103,36 @@ const MatchPage = () => {
   const [originalList, setOrginalList] = useState([])
   useEffect(() => {
     async function getPeople() {
-	  try {
-		const response = await get('email', user.email, USER_PREFERENCES_TABLE)
-		if (response.success) {
-		  setUserPrefs(response.data)
-		  try {
-			const people = await mergeTables(
-			  USER_PREFERENCES_TABLE,
-			  USER_TABLE,
-			  USER_PROFILE_PICTURES
-			)
-			setPeopleList(people)
-			console.log(peopleList)
-			filterMatches()
-		  } catch (e) {
-			console.error(e)
-		  }
-		}
-	  } catch (e) {
-	    console.error(e)
-	  }
+      if (!user.username) {
+        return []
+      }
+      try {
+        const response = await get(
+          'username',
+          user.username,
+          USER_PREFERENCES_TABLE
+        )
+        if (response.success) {
+          setUserPrefs(response.data)
+          try {
+            const people = await mergeTables(
+              USER_PREFERENCES_TABLE,
+              USER_TABLE,
+              USER_PROFILE_PICTURES
+            )
+            setPeopleList(people)
+            console.log(peopleList)
+            filterMatches()
+          } catch (e) {
+            console.error(e)
+          }
+        }
+      } catch (e) {
+        console.error(e)
+      }
     }
     getPeople()
-  }, [])
+  }, [user.username])
 
   return (
     <>

@@ -180,8 +180,8 @@ const QuizzesPage = () => {
     }
     const resp = await update(
       { [question.id]: answer },
-      'email',
-      user?.email,
+      'username',
+      user?.username,
       USER_PREFERENCES_TABLE
     )
     if (!resp.success) {
