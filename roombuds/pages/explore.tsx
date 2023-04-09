@@ -198,19 +198,26 @@ const ExplorePage = () => {
                       </span>
                     </Typography>
                     <Typography>
-                      <span
-                        style={{
-                          fontWeight: 600,
-                          fontSize: '12px',
-                        }}
-                      >
-                        {peopleList[index].college}
-                      </span>
+                    {peopleList[index].college.length <= 30 ? (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].college}
+                        </span>
+                      ) : (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].college.substring(0, 30) + "..."}
+                        </span>
+                      )}
                     </Typography>
                     <Typography>
-                      <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                        {peopleList[index].company}
-                      </span>
+                    {peopleList[index].company.length <= 30 ? (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].company}
+                        </span>
+                      ) : (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].company.substring(0, 30) + "..."}
+                        </span>
+                      )}
                     </Typography>
                   </div>
                 </Grid>
