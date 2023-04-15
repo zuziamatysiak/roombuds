@@ -10,11 +10,12 @@ import {
   USER_TABLE,
 } from '../utils/constants'
 import { get, mergeTables, put, scanTable } from '../utils/database'
-import { sortMatches } from '../utils/matching'
+import { sortMatches, getFeaturedMatch } from '../utils/matching'
 
 const MatchPage = () => {
   const [user] = useUser()
   const [userPrefs, setUserPrefs] = useState<any>({})
+  const [featuredMatch, setFeaturedMatch] = useState<any>({})
   const myLoader = ({ src, width, quality }) => {
     return src + '/${src}?w=${width}&q=${quality || 75}'
   }
@@ -41,8 +42,10 @@ const MatchPage = () => {
               USER_TABLE,
               USER_PROFILE_PICTURES
             )
-            const sortedMatches = sortMatches(user, userPrefs, people)
+            const match1 = getFeaturedMatch(user, userPrefs, people)
+            const sortedMatches = sortMatches(user, userPrefs, match1, people)
             setPeopleList(sortedMatches)
+            setFeaturedMatch(match1)
           } catch (e) {
             console.error(e)
           }
@@ -65,85 +68,89 @@ const MatchPage = () => {
           Your roommate matches
         </span>
       </Typography>
-      <Typography
-        variant="h5"
-        style={{ marginTop: '2rem', marginLeft: '2rem' }}
-      >
-        <span style={{ fontWeight: 600 }}>
-          Featured roommate match
-        </span>
-      </Typography>
-      <Card style={{ width: '100%' }}>
-        <Grid container>
-          {userPrefs.profilePicPath !== undefined ? (
-            <Image
-              // TODO: improve UI
-              src={userPrefs.profilePicPath}
-              alt="profile_picture"
-              width={200}
-              height={200}
-              style={{ alignContent: 'center' }}
-            />
-          ) : (
-            <Image
-              // TODO: improve UI
-              src={RANDOM_PATH}
-              alt="profile_picture"
-              width={200}
-              height={200}
-              style={{ alignContent: 'center' }}
-            />
-          )}
-          <div
-            style={{
-              marginLeft: '3rem',
-              marginTop: '2rem',
-            }}
+      {featuredMatch != null ? 
+        <>
+          <Typography
+            variant="h5"
+            style={{ marginTop: '2rem', marginLeft: '2rem' }}
           >
-            <Typography>
-              {userPrefs.firstName !== undefined ? (
-                <span style={{ fontWeight: 600 }}>
-                  {userPrefs.firstName}
-                </span>
+            <span style={{ fontWeight: 600 }}>
+              Featured roommate match
+            </span>
+          </Typography>
+          <Card style={{ width: '100%' }}>
+            <Grid container>
+              {featuredMatch?.profilePicPath !== undefined ? (
+                <Image
+                  // TODO: improve UI
+                  src={featuredMatch?.profilePicPath}
+                  alt="profile_picture"
+                  width={200}
+                  height={200}
+                  style={{ alignContent: 'center' }}
+                />
               ) : (
-                <span style={{ fontWeight: 600 }}></span>
+                <Image
+                  // TODO: improve UI
+                  src={RANDOM_PATH}
+                  alt="profile_picture"
+                  width={200}
+                  height={200}
+                  style={{ alignContent: 'center' }}
+                />
               )}
-            </Typography>
-            <Typography>
-              {userPrefs.loc_city.length <= 10 ? (
-                <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                  {userPrefs.loc_city},{' '}
-                  {userPrefs.loc_state}
-                </span>
-              ) : (
-                <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                  {userPrefs.loc_city}
-                </span>
-              )}
-            </Typography>
-            <Typography>
-              <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                {userPrefs.budget}
-              </span>
-            </Typography>
-            <Typography>
-              <span
+              <div
                 style={{
-                  fontWeight: 600,
-                  fontSize: '12px',
+                  marginLeft: '3rem',
+                  marginTop: '2rem',
                 }}
               >
-                {userPrefs.college}
-              </span>
-            </Typography>
-            <Typography>
-              <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                {userPrefs.company}
-              </span>
-            </Typography>
-          </div>
-        </Grid>
-      </Card>
+                <Typography>
+                  {featuredMatch?.firstName !== undefined ? (
+                    <span style={{ fontWeight: 600 }}>
+                      {featuredMatch.firstName}
+                    </span>
+                  ) : (
+                    <span style={{ fontWeight: 600 }}></span>
+                  )}
+                </Typography>
+                <Typography>
+                  {featuredMatch?.loc_city?.length ?? 11 <= 10 ? (
+                    <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                      {featuredMatch?.loc_city},{' '}
+                      {featuredMatch?.loc_state}
+                    </span>
+                  ) : (
+                    <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                      {featuredMatch?.loc_city}
+                    </span>
+                  )}
+                </Typography>
+                <Typography>
+                  <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                    {featuredMatch?.budget}
+                  </span>
+                </Typography>
+                <Typography>
+                  <span
+                    style={{
+                      fontWeight: 600,
+                      fontSize: '12px',
+                    }}
+                  >
+                    {featuredMatch?.college}
+                  </span>
+                </Typography>
+                <Typography>
+                  <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                    {featuredMatch?.company}
+                  </span>
+                </Typography>
+              </div>
+            </Grid>
+          </Card>
+        </>
+      : null }
       <Typography
         variant="h5"
         style={{ marginTop: '2rem', marginLeft: '2rem' }}
