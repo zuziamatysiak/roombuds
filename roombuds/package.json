@@ -22,6 +22,7 @@
     "@types/react-dom": "18.0.8",
     "aws-sdk": "^2.1253.0",
     "date-fns": "^2.29.3",
+    "edmonds-blossom": "^1.0.0",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",
     "next": "13.0.2",
