@@ -90,29 +90,29 @@ export function sortMatches(user, userPrefs, match1, ppl) {
 export function getFeaturedMatch(user, userPrefs, ppl) {
   const everyone = []
   ppl.forEach(function (p) {
-	if (p.loc_state == userPrefs.loc_state) {
-		everyone.push(p)
-	}
+    if (p.loc_state == userPrefs.loc_state) {
+      everyone.push(p)
+    }
   })
   let data = [...Array(everyone.length)].map(e => Array(everyone.length));
 
   let i = 0, j = 0, me = 0
   for (let p1 of everyone) {
-	if (p1.username == user.username) {
-		me = i
-	}
-	for (let p2 of everyone) {
-		// blossom is weird if we use actual scores??
-		data[i][j] = j // getScore(p1, p2) + (j / i)
-		j += 1
-	}
-	j = 0
-	i += 1
+    if (p1.username == user.username) {
+      me = i
+    }
+    for (let p2 of everyone) {
+      // this impl of blossom is weird
+      data[i][j] = getScore(p1, p2) % 7
+      j += 1
+    }
+    j = 0
+    i += 1
   }
 
   const results = blossom(data)
   if (results[me] == -1) {
-	return null
+	  return null
   }
   return everyone[results[me]]
 }
