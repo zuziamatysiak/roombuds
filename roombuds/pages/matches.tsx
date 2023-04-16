@@ -14,11 +14,7 @@ import { sortMatches, getFeaturedMatch } from '../utils/matching'
 
 const MatchPage = () => {
   const [user] = useUser()
-  const [userPrefs, setUserPrefs] = useState<any>({})
   const [featuredMatch, setFeaturedMatch] = useState<any>({})
-  const myLoader = ({ src, width, quality }) => {
-    return src + '/${src}?w=${width}&q=${quality || 75}'
-  }
 
   // TODO: add error checking
   const [peopleList, setPeopleList] = useState([])
@@ -35,7 +31,6 @@ const MatchPage = () => {
         )
         if (response.success) {
           const userPrefs = response.data
-          setUserPrefs(userPrefs)
           try {
             const people = await mergeTables(
               USER_PREFERENCES_TABLE,
@@ -44,8 +39,8 @@ const MatchPage = () => {
             )
             const match1 = getFeaturedMatch(user, userPrefs, people)
             const sortedMatches = sortMatches(user, userPrefs, match1, people)
-            setPeopleList(sortedMatches)
-            setFeaturedMatch(match1)
+            setFeaturedMatch(match1 ?? sortedMatches[0])
+            setPeopleList(match1 ? sortedMatches : sortedMatches.slice(1))
           } catch (e) {
             console.error(e)
           }
@@ -78,11 +73,10 @@ const MatchPage = () => {
               Featured roommate match
             </span>
           </Typography>
-          <Card style={{ width: '100%' }}>
+          <Card style={{ width: '50%', marginLeft: '3rem', marginTop: '2rem' }}>
             <Grid container>
               {featuredMatch?.profilePicPath !== undefined ? (
                 <Image
-                  // TODO: improve UI
                   src={featuredMatch?.profilePicPath}
                   alt="profile_picture"
                   width={200}
@@ -156,95 +150,97 @@ const MatchPage = () => {
         style={{ marginTop: '2rem', marginLeft: '2rem' }}
       >
         <span style={{ fontWeight: 600 }}>
-          Your matches
+        {peopleList.length == 0 ? "No matches found" : "Your matches"}
         </span>
       </Typography>
-      <Grid
-        container
-        spacing={7}
-        columns={5}
-        style={{
-          marginTop: '1rem',
-          marginRight: '0.2rem',
-          marginLeft: '0.2rem',
-        }}
-      >
-        {Array.from(Array(peopleList.length)).map((_, index) => (
-          <Grid item xs={2} sm={4} md={4} lg={4} key={index}>
-            <Card style={{ width: '100%' }}>
-              <Grid container>
-                {peopleList[index].profilePicPath !== undefined ? (
-                  <Image
-                    // TODO: improve UI
-                    src={peopleList[index].profilePicPath}
-                    alt="profile_picture"
-                    width={200}
-                    height={200}
-                    style={{ alignContent: 'center' }}
-                  />
-                ) : (
-                  <Image
-                    // TODO: improve UI
-                    src={RANDOM_PATH}
-                    alt="profile_picture"
-                    width={200}
-                    height={200}
-                    style={{ alignContent: 'center' }}
-                  />
-                )}
-                <div
-                  style={{
-                    marginLeft: '3rem',
-                    marginTop: '2rem',
-                  }}
-                >
-                  <Typography>
-                    {peopleList[index].firstName !== undefined ? (
-                      <span style={{ fontWeight: 600 }}>
-                        {peopleList[index].firstName}
-                      </span>
-                    ) : (
-                      <span style={{ fontWeight: 600 }}></span>
-                    )}
-                  </Typography>
-                  <Typography>
-                    {peopleList[index].loc_city.length <= 10 ? (
+      {peopleList.length > 0 ? 
+        <Grid
+          container
+          spacing={7}
+          columns={5}
+          style={{
+            marginTop: '1rem',
+            marginRight: '0.2rem',
+            marginLeft: '0.2rem',
+          }}
+        >
+          {Array.from(Array(peopleList.length)).map((_, index) => (
+            <Grid item xs={2} sm={4} md={4} lg={4} key={index}>
+              <Card style={{ width: '100%' }}>
+                <Grid container>
+                  {peopleList[index].profilePicPath !== undefined ? (
+                    <Image
+                      // TODO: improve UI
+                      src={peopleList[index].profilePicPath}
+                      alt="profile_picture"
+                      width={200}
+                      height={200}
+                      style={{ alignContent: 'center' }}
+                    />
+                  ) : (
+                    <Image
+                      // TODO: improve UI
+                      src={RANDOM_PATH}
+                      alt="profile_picture"
+                      width={200}
+                      height={200}
+                      style={{ alignContent: 'center' }}
+                    />
+                  )}
+                  <div
+                    style={{
+                      marginLeft: '3rem',
+                      marginTop: '2rem',
+                    }}
+                  >
+                    <Typography>
+                      {peopleList[index].firstName !== undefined ? (
+                        <span style={{ fontWeight: 600 }}>
+                          {peopleList[index].firstName}
+                        </span>
+                      ) : (
+                        <span style={{ fontWeight: 600 }}></span>
+                      )}
+                    </Typography>
+                    <Typography>
+                      {peopleList[index].loc_city.length <= 10 ? (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].loc_city},{' '}
+                          {peopleList[index].loc_state}
+                        </span>
+                      ) : (
+                        <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                          {peopleList[index].loc_city}
+                        </span>
+                      )}
+                    </Typography>
+                    <Typography>
                       <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                        {peopleList[index].loc_city},{' '}
-                        {peopleList[index].loc_state}
+                        {peopleList[index].budget}
                       </span>
-                    ) : (
+                    </Typography>
+                    <Typography>
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          fontSize: '12px',
+                        }}
+                      >
+                        {peopleList[index].college}
+                      </span>
+                    </Typography>
+                    <Typography>
                       <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                        {peopleList[index].loc_city}
+                        {peopleList[index].company}
                       </span>
-                    )}
-                  </Typography>
-                  <Typography>
-                    <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                      {peopleList[index].budget}
-                    </span>
-                  </Typography>
-                  <Typography>
-                    <span
-                      style={{
-                        fontWeight: 600,
-                        fontSize: '12px',
-                      }}
-                    >
-                      {peopleList[index].college}
-                    </span>
-                  </Typography>
-                  <Typography>
-                    <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                      {peopleList[index].company}
-                    </span>
-                  </Typography>
-                </div>
-              </Grid>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                    </Typography>
+                  </div>
+                </Grid>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        : null }
     </>
   )
 }
