@@ -11,6 +11,7 @@ import {
 } from '../utils/constants'
 import { get, mergeTables, put, scanTable } from '../utils/database'
 import { sortMatches, getFeaturedMatch } from '../utils/matching'
+import Link from 'next/link'
 
 const MatchPage = () => {
   const [user] = useUser()
@@ -73,76 +74,78 @@ const MatchPage = () => {
               Featured roommate match
             </span>
           </Typography>
-          <Card style={{ width: '50%', marginLeft: '3rem', marginTop: '2rem' }}>
-            <Grid container>
-              {featuredMatch?.profilePicPath !== undefined ? (
-                <Image
-                  src={featuredMatch?.profilePicPath}
-                  alt="profile_picture"
-                  width={200}
-                  height={200}
-                  style={{ alignContent: 'center' }}
-                />
-              ) : (
-                <Image
-                  // TODO: improve UI
-                  src={RANDOM_PATH}
-                  alt="profile_picture"
-                  width={200}
-                  height={200}
-                  style={{ alignContent: 'center' }}
-                />
-              )}
-              <div
-                style={{
-                  marginLeft: '3rem',
-                  marginTop: '2rem',
-                }}
-              >
-                <Typography>
-                  {featuredMatch?.firstName !== undefined ? (
-                    <span style={{ fontWeight: 600 }}>
-                      {featuredMatch.firstName}
-                    </span>
-                  ) : (
-                    <span style={{ fontWeight: 600 }}></span>
-                  )}
-                </Typography>
-                <Typography>
-                  {featuredMatch?.loc_city?.length ?? 11 <= 10 ? (
+          <Link href={`/profile/${featuredMatch.username}`}>
+            <Card style={{ width: '33%', marginLeft: '3rem', marginTop: '2rem' }}>
+              <Grid container>
+                {featuredMatch?.profilePicPath !== undefined ? (
+                  <Image
+                    src={featuredMatch?.profilePicPath}
+                    alt="profile_picture"
+                    width={200}
+                    height={200}
+                    style={{ alignContent: 'center' }}
+                  />
+                ) : (
+                  <Image
+                    // TODO: improve UI
+                    src={RANDOM_PATH}
+                    alt="profile_picture"
+                    width={200}
+                    height={200}
+                    style={{ alignContent: 'center' }}
+                  />
+                )}
+                <div
+                  style={{
+                    marginLeft: '3rem',
+                    marginTop: '2rem',
+                  }}
+                >
+                  <Typography>
+                    {featuredMatch?.firstName !== undefined ? (
+                      <span style={{ fontWeight: 600 }}>
+                        {featuredMatch.firstName}
+                      </span>
+                    ) : (
+                      <span style={{ fontWeight: 600 }}></span>
+                    )}
+                  </Typography>
+                  <Typography>
+                    {featuredMatch?.loc_city?.length ?? 11 <= 10 ? (
+                      <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                        {featuredMatch?.loc_city},{' '}
+                        {featuredMatch?.loc_state}
+                      </span>
+                    ) : (
+                      <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                        {featuredMatch?.loc_city}
+                      </span>
+                    )}
+                  </Typography>
+                  <Typography>
                     <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                      {featuredMatch?.loc_city},{' '}
-                      {featuredMatch?.loc_state}
+                      {featuredMatch?.budget}
                     </span>
-                  ) : (
+                  </Typography>
+                  <Typography>
+                    <span
+                      style={{
+                        fontWeight: 600,
+                        fontSize: '12px',
+                      }}
+                    >
+                      {featuredMatch?.college}
+                    </span>
+                  </Typography>
+                  <Typography>
                     <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                      {featuredMatch?.loc_city}
+                      {featuredMatch?.company}
                     </span>
-                  )}
-                </Typography>
-                <Typography>
-                  <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                    {featuredMatch?.budget}
-                  </span>
-                </Typography>
-                <Typography>
-                  <span
-                    style={{
-                      fontWeight: 600,
-                      fontSize: '12px',
-                    }}
-                  >
-                    {featuredMatch?.college}
-                  </span>
-                </Typography>
-                <Typography>
-                  <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                    {featuredMatch?.company}
-                  </span>
-                </Typography>
-              </div>
-            </Grid>
-          </Card>
+                  </Typography>
+                </div>
+              </Grid>
+            </Card>
+          </Link>
         </>
       : null }
       <Typography
