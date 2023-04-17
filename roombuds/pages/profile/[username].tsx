@@ -86,6 +86,9 @@ const ProfilePage = () => {
                     </Subtitle>
                     <Subtitle text="Gender">{userPrefs?.gender}</Subtitle>
                   </div>
+                  <Subtitle text="Instagram" style={{ width: '50%' }}>
+                    {`@${userPrefs?.instagram}`}
+                  </Subtitle>
                 </Card>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
