@@ -165,7 +165,7 @@ export default function VerifyPage() {
         return
       }
 
-      const updateResp = await update({ verified: true }, 'email', user.email, USER_TABLE)
+      const updateResp = await update({ verified: true }, 'username', user.username, USER_TABLE)
       if (!updateResp.success) {
         console.log(updateResp.errorMessage)
         alert('Unable to verify email at this time. Please try again later.')

@@ -25,6 +25,7 @@ export const generateVerificationEmail = (email: string, code: string): MailOpti
 
 
 export const sendVerificationEmail = async (email: string, code: string): Promise<SendResponse> => {
+  console.log(code)
   try {
     fetch("/api/send_mail", {
       method: "POST",
@@ -36,6 +37,7 @@ export const sendVerificationEmail = async (email: string, code: string): Promis
       }
     })
   } catch (error) {
+    console.log(error)
     return { success: false, errorMessage: "Error at /api/send_mail" }
   }
   return { success: true }
