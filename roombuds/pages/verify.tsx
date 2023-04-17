@@ -77,8 +77,8 @@ async function verifyEmail(email: string, org: string, orgType: string)
   return { success: true }
 }
 
-async function getUserOrg(email: string, orgType: string): Promise<string> {
-  const org = await get('email', email, USER_PREFERENCES_TABLE, orgType)
+async function getUserOrg(username: string, orgType: string): Promise<string> {
+  const org = await get('username', username, USER_PREFERENCES_TABLE, orgType)
   if (!org.success || org.data == null) {
     return ""
   }
@@ -127,7 +127,7 @@ export default function VerifyPage() {
         alert('Please choose either college or work email to verify.')
         return
       }
-      state.org = await getUserOrg(user.email, state.orgType)
+      state.org = await getUserOrg(user.username, state.orgType)
       if (state.org === '') {
         alert('You do not have a college/company set. Please set it in your profile before verifying.')
         return
