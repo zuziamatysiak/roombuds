@@ -139,7 +139,6 @@ export const scanTable = async (table: string) => {
   return scanResults
 }
 
-// TODO: generalize
 export const mergeTables = async (
   table1: string,
   table2: string,
@@ -151,7 +150,6 @@ export const mergeTables = async (
 
   const scanResults = []
 
-  // TODO: add error checls
   for (var i = 0; i < res1.length; i++) {
     var curr = res1[i]
     for (var j = 0; j < res2.length; j++) {

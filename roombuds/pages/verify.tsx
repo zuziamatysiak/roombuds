@@ -29,7 +29,6 @@ const initialState = {
 }
 
 function generateCode() {
-  // uhhh apparently there are edge cases where this doesn't work
   return Math.random().toString(36).substring(2, 8)
 }
 
@@ -68,9 +67,7 @@ async function verifyEmail(email: string, org: string, orgType: string)
   let domains = []
   if (orgType === 'college') {
     domains = await getCollegeDomains(org)
-  } else {
-    // TODO: get company domains
-  }
+  } 
   if (!domains.includes(split[1])) {
     return { success: false, errorMessage: `Please enter a valid email address for ${org}.` }
   }
@@ -139,7 +136,7 @@ export default function VerifyPage() {
         alert(emailFormatResp.errorMessage)
         return
       }
-      // TODO: add expiration time
+
       const code = generateCode()
       const resp = await put({ email: user.email, code: code }, VERIFICATION_CODE_TABLE)
       if (!resp.success) {

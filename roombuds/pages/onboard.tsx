@@ -41,7 +41,6 @@ export default function OnboardPage() {
     return ''
   }
 
-  // TODO: form validation
   const handleSubmit = async () => {
     let missing = stateChecker()
     if (missing.length == 0) {

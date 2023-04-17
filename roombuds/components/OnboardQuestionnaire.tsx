@@ -24,7 +24,6 @@ export const OnboardQuestionnaire = ({ state, updateState }: any) => {
       })
       setSelectedHobbies(data)
       state.hobb = l
-      // TODO: change to actually display hobbies correctly
       let s: string = ''
       l.forEach(function (val: string) {
         s += val + ' '

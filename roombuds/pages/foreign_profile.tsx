@@ -53,15 +53,12 @@ const ForeignProfilePage = (props) => {
     fetchProfilePic()
   }, [user?.email])
 
-  // TODO: add picture cropping instead of squashing
   const myLoader = ({ src, width, quality }) => {
     console.log(filePath)
     if (filePath == undefined) setFilePath(RANDOM_PATH)
-    // TODO: Add check if someone added a valid URL
     return filePath + '/${src}?w=${width}&q=${quality || 75}'
   }
 
-  // TODO: later change it to save a file as opposed to saving a link
   function onFileChange(data: any) {
     setTempPath(data.target.value)
   }
@@ -84,7 +81,6 @@ const ForeignProfilePage = (props) => {
           <Grid item xs={12} sm={6} md={6}>
             <Card variant="outlined" style={{ padding: '2rem' }}>
               <Image
-                // TODO: improve UI
                 loader={myLoader}
                 src="profile.png"
                 alt="profile_picture"

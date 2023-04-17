@@ -15,14 +15,6 @@ import { get, mergeTables, put, scanTable } from '../utils/database'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-/*
-TODO: 
-- add error checking
-- when clicking transfer to another website
-- generalize mergeTable
-- enable search
-- fix image sizing
-*/
 const ExplorePage = () => {
   // NOTE: only added company and school search as the rest should be based on the matching algorithm
   const [companyInput, setCompanyInput] = useState('')
@@ -33,7 +25,6 @@ const ExplorePage = () => {
   }
   const router = useRouter()
 
-  // TODO: add error checking
   const [peopleList, setPeopleList] = useState([])
   const [originalList, setOrginalList] = useState([])
   useEffect(() => {
@@ -158,7 +149,6 @@ const ExplorePage = () => {
               <Card style={{ width: '100%' }}>
                 <Grid container>
                   <Image
-                    // TODO: improve UI
                     src={peopleList[index].profilePicPath || RANDOM_PATH}
                     alt="profile_picture"
                     width={200}
