@@ -169,77 +169,79 @@ const MatchPage = () => {
         >
           {Array.from(Array(peopleList.length)).map((_, index) => (
             <Grid item xs={2} sm={4} md={4} lg={4} key={index}>
-              <Card style={{ width: '100%' }}>
-                <Grid container>
-                  {peopleList[index].profilePicPath !== undefined ? (
-                    <Image
-                      // TODO: improve UI
-                      src={peopleList[index].profilePicPath}
-                      alt="profile_picture"
-                      width={200}
-                      height={200}
-                      style={{ alignContent: 'center' }}
-                    />
-                  ) : (
-                    <Image
-                      // TODO: improve UI
-                      src={RANDOM_PATH}
-                      alt="profile_picture"
-                      width={200}
-                      height={200}
-                      style={{ alignContent: 'center' }}
-                    />
-                  )}
-                  <div
-                    style={{
-                      marginLeft: '3rem',
-                      marginTop: '2rem',
-                    }}
-                  >
-                    <Typography>
-                      {peopleList[index].firstName !== undefined ? (
-                        <span style={{ fontWeight: 600 }}>
-                          {peopleList[index].firstName}
-                        </span>
-                      ) : (
-                        <span style={{ fontWeight: 600 }}></span>
-                      )}
-                    </Typography>
-                    <Typography>
-                      {peopleList[index].loc_city.length <= 10 ? (
+              <Link href={`/profile/${peopleList[index].username}`}>
+                <Card style={{ width: '100%' }}>
+                  <Grid container>
+                    {peopleList[index].profilePicPath !== undefined ? (
+                      <Image
+                        // TODO: improve UI
+                        src={peopleList[index].profilePicPath}
+                        alt="profile_picture"
+                        width={200}
+                        height={200}
+                        style={{ alignContent: 'center' }}
+                      />
+                    ) : (
+                      <Image
+                        // TODO: improve UI
+                        src={RANDOM_PATH}
+                        alt="profile_picture"
+                        width={200}
+                        height={200}
+                        style={{ alignContent: 'center' }}
+                      />
+                    )}
+                    <div
+                      style={{
+                        marginLeft: '3rem',
+                        marginTop: '2rem',
+                      }}
+                    >
+                      <Typography>
+                        {peopleList[index].firstName !== undefined ? (
+                          <span style={{ fontWeight: 600 }}>
+                            {peopleList[index].firstName}
+                          </span>
+                        ) : (
+                          <span style={{ fontWeight: 600 }}></span>
+                        )}
+                      </Typography>
+                      <Typography>
+                        {peopleList[index].loc_city.length <= 10 ? (
+                          <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                            {peopleList[index].loc_city},{' '}
+                            {peopleList[index].loc_state}
+                          </span>
+                        ) : (
+                          <span style={{ fontWeight: 600, fontSize: '12px' }}>
+                            {peopleList[index].loc_city}
+                          </span>
+                        )}
+                      </Typography>
+                      <Typography>
                         <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                          {peopleList[index].loc_city},{' '}
-                          {peopleList[index].loc_state}
+                          {peopleList[index].budget}
                         </span>
-                      ) : (
+                      </Typography>
+                      <Typography>
+                        <span
+                          style={{
+                            fontWeight: 600,
+                            fontSize: '12px',
+                          }}
+                        >
+                          {peopleList[index].college}
+                        </span>
+                      </Typography>
+                      <Typography>
                         <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                          {peopleList[index].loc_city}
+                          {peopleList[index].company}
                         </span>
-                      )}
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                        {peopleList[index].budget}
-                      </span>
-                    </Typography>
-                    <Typography>
-                      <span
-                        style={{
-                          fontWeight: 600,
-                          fontSize: '12px',
-                        }}
-                      >
-                        {peopleList[index].college}
-                      </span>
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: 600, fontSize: '12px' }}>
-                        {peopleList[index].company}
-                      </span>
-                    </Typography>
-                  </div>
-                </Grid>
-              </Card>
+                      </Typography>
+                    </div>
+                  </Grid>
+                </Card>
+              </Link>
             </Grid>
           ))}
         </Grid>
